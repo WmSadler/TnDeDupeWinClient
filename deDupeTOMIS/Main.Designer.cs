@@ -39,7 +39,6 @@
             this.tabDeDupMain = new System.Windows.Forms.TabControl();
             this.tabFacialRecognition = new System.Windows.Forms.TabPage();
             this.splitContainerMainFr = new System.Windows.Forms.SplitContainer();
-            this.btnCameraOn = new System.Windows.Forms.Button();
             this.btnRecogFaceCamera = new System.Windows.Forms.Button();
             this.btnGenerateTemplateCamera = new System.Windows.Forms.Button();
             this.btnRecogFaceFile = new System.Windows.Forms.Button();
@@ -188,7 +187,6 @@
             // 
             // splitContainerMainFr.Panel1
             // 
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnCameraOn);
             this.splitContainerMainFr.Panel1.Controls.Add(this.btnRecogFaceCamera);
             this.splitContainerMainFr.Panel1.Controls.Add(this.btnGenerateTemplateCamera);
             this.splitContainerMainFr.Panel1.Controls.Add(this.btnRecogFaceFile);
@@ -204,16 +202,6 @@
             this.splitContainerMainFr.SplitterDistance = 375;
             this.splitContainerMainFr.SplitterWidth = 1;
             this.splitContainerMainFr.TabIndex = 0;
-            // 
-            // btnCameraOn
-            // 
-            this.btnCameraOn.Location = new System.Drawing.Point(26, 790);
-            this.btnCameraOn.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnCameraOn.Name = "btnCameraOn";
-            this.btnCameraOn.Size = new System.Drawing.Size(322, 103);
-            this.btnCameraOn.TabIndex = 9;
-            this.btnCameraOn.Text = "Camera On";
-            this.btnCameraOn.UseVisualStyleBackColor = false;
             // 
             // btnRecogFaceCamera
             // 
@@ -343,7 +331,7 @@
             this.tabSetup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabSetup.Name = "tabSetup";
             this.tabSetup.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabSetup.Size = new System.Drawing.Size(1888, 984);
+            this.tabSetup.Size = new System.Drawing.Size(1879, 958);
             this.tabSetup.TabIndex = 1;
             this.tabSetup.Text = "Setup";
             this.tabSetup.UseVisualStyleBackColor = true;
@@ -521,7 +509,7 @@
             this.tabResults.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabResults.Name = "tabResults";
             this.tabResults.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabResults.Size = new System.Drawing.Size(1888, 984);
+            this.tabResults.Size = new System.Drawing.Size(1879, 958);
             this.tabResults.TabIndex = 2;
             this.tabResults.Text = "DeDupe Results";
             this.tabResults.UseVisualStyleBackColor = true;
@@ -608,7 +596,6 @@
         private System.Windows.Forms.PictureBox imgOriginal;
         private System.Windows.Forms.GroupBox grpImgModified;
         private System.Windows.Forms.PictureBox imgProcessed;
-        private System.Windows.Forms.Button btnCameraOn;
     }
 }
 
