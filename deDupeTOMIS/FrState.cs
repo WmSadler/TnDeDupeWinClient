@@ -1,36 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenCvSharp;
 
 namespace deDupeTOMIS
 {
     public static class FrState
     {
-        static bool _ippConnect;
-        public static bool ippConnect
+        static bool _ippConnected;
+        static bool _tomisDbConnected;
+        static bool _templateDbConnected;
+        public static Mat imgWorking;
+
+        public static bool ippConnected
         {
             get
             {
-                return _ippConnect;
+                return _ippConnected;
             }
             set
             {
-                _ippConnect = value;
+                _ippConnected = value;
             }
         }
 
-        static bool _ippLocal;
-        public static bool ippLocal
+        public static bool tomisDbConnected
         {
             get
             {
-                return _ippLocal;
+                return _tomisDbConnected;
             }
             set
             {
-                _ippLocal = value;
+                _tomisDbConnected = value;
+            }
+        }
+
+        public static bool templateDbConnected
+        {
+            get
+            {
+                return _templateDbConnected;
+            }
+            set
+            {
+                _templateDbConnected = value;
             }
         }
     }
