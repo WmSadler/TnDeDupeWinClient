@@ -71,10 +71,13 @@ namespace deDupeTOMIS
             bool done = false;
             this.Enabled = false;
 
+            VideoCapture capDev = new VideoCapture(0);
+            Window vidPreview = new Window("Video Preview");
+            Mat imgRaw = new Mat();
 
-            using (VideoCapture capDev = new VideoCapture(0))
-            using (Window vidPreview = new Window("Video Preview"))
-            using (Mat imgRaw = new Mat())
+            //using (VideoCapture capDev = new VideoCapture(0))
+            //using (Window vidPreview = new Window("Video Preview"))
+            //using (Mat imgRaw = new Mat())
             {
                 while (!done)
                 {
@@ -96,7 +99,10 @@ namespace deDupeTOMIS
                         }
                     }
                 }
+                vidPreview.Close();
+                vidPreview.Dispose();
                 imgRaw.Dispose();
+                capDev.Dispose();
                 this.Enabled = true;
             }
         }
@@ -104,7 +110,7 @@ namespace deDupeTOMIS
         private void btnImageFromFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofDialog = new OpenFileDialog();
-            ofDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Application.StartupPath)+"\\..\\..\\..\\inputImages";
+            ofDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Application.StartupPath)+"\\..\\..\\..\\inputImages\\";
             ofDialog.Filter = "jpeg (*.jpg)|*.jpg|png (*.png)|*.png|All Files (*.*)|*.*";
             ofDialog.FilterIndex = 1;
             ofDialog.RestoreDirectory = false;
@@ -135,11 +141,17 @@ namespace deDupeTOMIS
         {
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
             Mat imgProc = FrState.imgWorking.Clone();
+            String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
+            System.Diagnostics.Debug.Print(haarLocation);
+            CascadeClassifier faceC = new CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
+            CascadeClassifier eyeL = new CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
+            CascadeClassifier eyeR = new CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
+            CascadeClassifier eyes = new CascadeClassifier(haarLocation + "haarcascade_eye.xml");
 
-            IStdVector<Rect> faces;
-            IStdVector<Rect> eyeLeft;
-            IStdVector<Rect> eyeRight;
-            IStdVector<Rect> eyes;
+            Rect[] faces;
+            Rect[] eyeLeft;
+            Rect[] eyeRight;
+            Rect[] eyeBoth;
 
             float imgArea = imgProc.Rows * imgProc.Cols;
             float faceWidth = (float)(System.Math.Sqrt(imgArea / C.phi));
@@ -150,6 +162,10 @@ namespace deDupeTOMIS
             int detectEyeHeight = (int)System.Math.Round(detectHeight * 0.125);
             int detectEyeWidth = (int)System.Math.Round(detectEyeHeight * C.phi);
 
+            faces = faceC.DetectMultiScale(imgProc,1.1, 2, HaarDetectionType.DoCannyPruning,new OpenCvSharp.Size(detectEyeWidth,detectEyeHeight));
+            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            eyeBoth = eyes.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
         }
 
         private void btnExit_Click(object sender, EventArgs e)
