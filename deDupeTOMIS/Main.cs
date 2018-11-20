@@ -190,7 +190,6 @@ namespace deDupeTOMIS
                 //Find Center of detected Face
                 Rect faceI = faces[faceIdx];
                 OpenCvSharp.Point ctr = new OpenCvSharp.Point(faceI.X + (faceI.Width / 2), faceI.Y + (faceI.Height / 2));
-                //System.Diagnostics.Debug.Print(ctr.ToString());
 
                 OpenCvSharp.Point[] eyeLctrs = new OpenCvSharp.Point[eyeLeft.Length];
                 OpenCvSharp.Point[] eyeRctrs = new OpenCvSharp.Point[eyeRight.Length];
@@ -242,9 +241,11 @@ namespace deDupeTOMIS
                 float eHeight = faceI.Width * C.phi;
 
                 OpenCvSharp.Size2f eSize = new OpenCvSharp.Size2f((float)eWidth, (float)eHeight);
+                OpenCvSharp.Size eSizeRect = new OpenCvSharp.Size((int)eWidth, (int)eHeight);
 
                 float angle = (float)(System.Math.Atan2(eyeRctrs[0].Y - eyeLctrs[0].Y, eyeRctrs[0].X - eyeLctrs[0].X)*180 / System.Math.PI);
                 OpenCvSharp.RotatedRect faceE = new OpenCvSharp.RotatedRect(ctr,eSize,angle);
+                OpenCvSharp.Rect faceRect = new OpenCvSharp.Rect(ctr.X-(eSizeRect.Width/2), ctr.Y-(eSizeRect.Height/2), eSizeRect.Width, eSizeRect.Height);
 
                 Random rnd = new Random();
                 int endLp = rnd.Next(1,3);
@@ -287,6 +288,13 @@ namespace deDupeTOMIS
                 imgProc.Circle(ctr, 1, ScBlack, 8);
                 imgProc.Ellipse(faceE, ScWhite, 8);
                 imgProcessed.Image = imgProc.ToBitmap();
+
+                Mat imgResize = imgProc.Clone(faceRect);
+                OpenCvSharp.Size newSize = new OpenCvSharp.Size(960,1440);
+                imgResize.Resize(newSize);
+                imgProcessed.Image = imgResize.ToBitmap();
+                
+                imgProcessed.Update();
             }
             else
             {
