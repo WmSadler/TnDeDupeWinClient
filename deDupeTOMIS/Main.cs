@@ -140,8 +140,13 @@ namespace deDupeTOMIS
         private void btnIdentifyImage_Click(object sender, EventArgs e)
         {
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
+            imgProcessed.Update();
+
             Mat imgProc = FrState.imgWorking.Clone();
+            Mat imgFinal = FrState.imgWorking.Clone();
+
             String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
+
             CascadeClassifier faceC = new CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
             CascadeClassifier eyeL = new CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
             CascadeClassifier eyeR = new CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
@@ -182,13 +187,110 @@ namespace deDupeTOMIS
                         faceIdx = i;
                     }
                 }
-                //Center of detected Face
-                Rect facel = faces[faceIdx];
-                OpenCvSharp.Point ctr = new OpenCvSharp.Point(facel.X + (facel.Width / 2), facel.Y + (facel.Height / 2));
-                System.Diagnostics.Debug.Print(ctr.ToString());
-            } else
+                //Find Center of detected Face
+                Rect faceI = faces[faceIdx];
+                OpenCvSharp.Point ctr = new OpenCvSharp.Point(faceI.X + (faceI.Width / 2), faceI.Y + (faceI.Height / 2));
+                //System.Diagnostics.Debug.Print(ctr.ToString());
+
+                OpenCvSharp.Point[] eyeLctrs = new OpenCvSharp.Point[eyeLeft.Length];
+                OpenCvSharp.Point[] eyeRctrs = new OpenCvSharp.Point[eyeRight.Length];
+
+                // check L eye detector
+                int nLeyes = 0;
+                int nReyes = 0;
+
+                for (int i = 0; i < eyeLeft.Length; i++)
+                {
+                    // figure the center of the eye guess
+                    OpenCvSharp.Point ctrEye = new OpenCvSharp.Point(eyeLeft[i].X + (eyeLeft[i].Width / 2), eyeLeft[i].Y + (eyeLeft[i].Height / 2));
+                    if (faceI.Contains(ctrEye))
+                    {   // if ctr eye point is in detected face
+                        if (ctrEye.X < ctr.X)
+                        {   // and point is left of the midline
+                            if (ctrEye.Y < ctr.Y)
+                            {   // and point is above center of face
+                                nLeyes++;
+                                eyeLctrs[nLeyes] = ctrEye; // this is a good left eye guess
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < eyeRight.Length; i++)
+                {
+                    // figure the center of the eye guess
+                    OpenCvSharp.Point ctrEye = new OpenCvSharp.Point(eyeRight[i].X + (eyeRight[i].Width / 2), eyeRight[i].Y + (eyeRight[i].Height / 2));
+                    if (faceI.Contains(ctrEye))
+                    {   // if ctr eye point is in detected face
+                        if (ctrEye.X < ctr.X)
+                        {   // and point is left of the midline
+                            if (ctrEye.Y < ctr.Y)
+                            {   // and point is above center of face
+                                nReyes++;
+                                eyeRctrs[nReyes] = ctrEye; // this is a good left eye guess
+                            }
+                        }
+                    }
+                }
+                OpenCvSharp.Scalar ScWhite = new OpenCvSharp.Scalar(255, 255, 255);
+                OpenCvSharp.Scalar ScBlack = new OpenCvSharp.Scalar(0, 0, 0);
+                OpenCvSharp.Scalar ScRed = new OpenCvSharp.Scalar(0, 0, 255);
+                OpenCvSharp.Scalar ScGreen = new OpenCvSharp.Scalar(0, 255, 0);
+                OpenCvSharp.Scalar ScBlue = new OpenCvSharp.Scalar(255, 0, 0);
+
+                float eWidth = faceI.Width;
+                float eHeight = faceI.Width * C.phi;
+
+                OpenCvSharp.Size2f eSize = new OpenCvSharp.Size2f((float)eWidth, (float)eHeight);
+
+                float angle = (float)(System.Math.Atan2(eyeRctrs[0].Y - eyeLctrs[0].Y, eyeRctrs[0].X - eyeLctrs[0].X)*180 / System.Math.PI);
+                OpenCvSharp.RotatedRect faceE = new OpenCvSharp.RotatedRect(ctr,eSize,angle);
+
+                Random rnd = new Random();
+                int endLp = rnd.Next(1,3);
+                for (int j = 0; j < endLp; j++)
+                {
+                    for (int i = 0; i < eyeLeft.Length; i++)
+                    {
+                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc.Rectangle(eyeLeft[i], ScRed, 8);
+                        imgProcessed.Image = imgProc.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc = imgFinal.Clone();
+                        System.Threading.Thread.Sleep(rnd.Next(50, 250));
+                    }
+
+                    for (int i = 0; i < eyeRight.Length; i++)
+                    {
+                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc.Rectangle(eyeRight[i], ScGreen, 8);
+                        imgProcessed.Image = imgProc.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc = imgFinal.Clone();
+                        System.Threading.Thread.Sleep(rnd.Next(50,250));
+                    }
+
+                    for (int i = 0; i < eyeBoth.Length; i++)
+                    {
+                        imgProc.Rectangle(eyeBoth[i], ScBlue, 8);
+                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc.Rectangle(eyeBoth[i], ScBlue, 8);
+                        imgProcessed.Image = imgProc.ToBitmap();
+                        imgProcessed.Update();
+                        imgProc = imgFinal.Clone();
+                        System.Threading.Thread.Sleep(rnd.Next(50,250));
+                    }
+                }
+                imgProc.Circle(ctr, 1, ScBlack, 8);
+                imgProc.Ellipse(faceE, ScWhite, 8);
+                imgProcessed.Image = imgProc.ToBitmap();
+            }
+            else
             {
-                MessageBox.Show("No Face Found", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No Face Found", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
