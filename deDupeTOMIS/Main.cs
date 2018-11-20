@@ -134,6 +134,22 @@ namespace deDupeTOMIS
         private void btnIdentifyImage_Click(object sender, EventArgs e)
         {
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
+            Mat imgProc = FrState.imgWorking.Clone();
+
+            IStdVector<Rect> faces;
+            IStdVector<Rect> eyeLeft;
+            IStdVector<Rect> eyeRight;
+            IStdVector<Rect> eyes;
+
+            float imgArea = imgProc.Rows * imgProc.Cols;
+            float faceWidth = (float)(System.Math.Sqrt(imgArea / C.phi));
+            float faceHeight = imgArea / faceWidth;
+
+            int detectWidth = (int)System.Math.Round(faceWidth * 0.125);
+            int detectHeight = (int)System.Math.Round(faceHeight * 0.125);
+            int detectEyeHeight = (int)System.Math.Round(detectHeight * 0.125);
+            int detectEyeWidth = (int)System.Math.Round(detectEyeHeight * C.phi);
+
         }
 
         private void btnExit_Click(object sender, EventArgs e)

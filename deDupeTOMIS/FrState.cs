@@ -8,7 +8,6 @@ namespace deDupeTOMIS
         static bool _tomisDbConnected;
         static bool _templateDbConnected;
         public static Mat imgWorking;
-
         public static bool ippConnected
         {
             get
@@ -44,5 +43,10 @@ namespace deDupeTOMIS
                 _templateDbConnected = value;
             }
         }
+    }
+
+    public class C
+    {
+        public static float phi = (float)((1.0+System.Math.Sqrt(5.0))/2.0);
     }
 }

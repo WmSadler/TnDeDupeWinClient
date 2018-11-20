@@ -168,7 +168,7 @@
             // 
             this.btnIdentifyImage.Enabled = false;
             this.btnIdentifyImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnIdentifyImage.Location = new System.Drawing.Point(26, 526);
+            this.btnIdentifyImage.Location = new System.Drawing.Point(26, 535);
             this.btnIdentifyImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnIdentifyImage.Name = "btnIdentifyImage";
             this.btnIdentifyImage.Size = new System.Drawing.Size(322, 103);
