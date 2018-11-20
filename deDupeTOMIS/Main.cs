@@ -71,18 +71,18 @@ namespace deDupeTOMIS
             bool done = false;
             this.Enabled = false;
 
-            VideoCapture capDev = new VideoCapture(0);
 
-            Window winVideo = new Window("Camera");
-            Mat imgRaw = new Mat();
+            using (VideoCapture capDev = new VideoCapture(0))
+            using (Window vidPreview = new Window("Video Preview"))
+            using (Mat imgRaw = new Mat())
             {
                 while (!done)
                 {
                     capDev.Read(imgRaw); // same as cvQueryFrame
                     if (!imgRaw.Empty())
                     {
-                        winVideo.ShowImage(imgRaw);
-                        switch (Cv2.WaitKey(10))
+                        vidPreview.ShowImage(imgRaw);
+                        switch (Cv2.WaitKey(100))
                         {
                             case 13:
                                 FrState.imgWorking = imgRaw.Clone();
@@ -96,18 +96,15 @@ namespace deDupeTOMIS
                         }
                     }
                 }
-                winVideo.Close();
-                winVideo.Dispose();
                 imgRaw.Dispose();
                 this.Enabled = true;
-            };
-            capDev.Release();
+            }
         }
 
         private void btnImageFromFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofDialog = new OpenFileDialog();
-            ofDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Application.ExecutablePath)+"..\\..\\..\\..\\inputImages\\";
+            ofDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Application.StartupPath)+"\\..\\..\\..\\inputImages";
             ofDialog.Filter = "jpeg (*.jpg)|*.jpg|png (*.png)|*.png|All Files (*.*)|*.*";
             ofDialog.FilterIndex = 1;
             ofDialog.RestoreDirectory = false;
@@ -115,9 +112,13 @@ namespace deDupeTOMIS
 
             if (ofDialog.ShowDialog() == DialogResult.OK)
             {
+                // put file image into win bitmap
                 Bitmap imgBmp = (Bitmap)Image.FromFile(ofDialog.FileName);
+                // colnvert to MAT format and put into global working image
                 FrState.imgWorking = BitmapConverter.ToMat(imgBmp);
+                // display the original image in the app
                 imgOriginal.Image = imgBmp;
+                // allow sending of the image to processing
                 btnIdentifyImage.Enabled = true;
             }
         }
@@ -132,10 +133,12 @@ namespace deDupeTOMIS
 
         private void btnIdentifyImage_Click(object sender, EventArgs e)
         {
-            Window sendingImage = new Window("Sending This Image");
-            sendingImage.ShowImage(FrState.imgWorking);
-            Cv2.WaitKey(30);
-            sendingImage.Dispose();
+            imgProcessed.Image = FrState.imgWorking.ToBitmap();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
         }
     }
 }
