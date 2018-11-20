@@ -142,7 +142,6 @@ namespace deDupeTOMIS
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
             Mat imgProc = FrState.imgWorking.Clone();
             String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
-            System.Diagnostics.Debug.Print(haarLocation);
             CascadeClassifier faceC = new CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
             CascadeClassifier eyeL = new CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
             CascadeClassifier eyeR = new CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
@@ -166,6 +165,31 @@ namespace deDupeTOMIS
             eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
             eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
             eyeBoth = eyes.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+
+            // find biggest detected face
+            int faceIdx = 0;
+            if (faces.Length >= 1)
+            {
+                // Largest Face Found
+                long size = 0;
+                long max = 0;
+                for (int i = 0; i < faces.Length; i++)
+                {
+                    size = faces[i].Height * faces[i].Width;
+                    if (size > max)
+                    {
+                        max = size;
+                        faceIdx = i;
+                    }
+                }
+                //Center of detected Face
+                Rect facel = faces[faceIdx];
+                OpenCvSharp.Point ctr = new OpenCvSharp.Point(facel.X + (facel.Width / 2), facel.Y + (facel.Height / 2));
+                System.Diagnostics.Debug.Print(ctr.ToString());
+            } else
+            {
+                MessageBox.Show("No Face Found", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
