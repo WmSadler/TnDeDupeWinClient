@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -305,6 +306,30 @@ namespace deDupeTOMIS
         private void btnExit_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();
+        }
+
+        private void btnConnectToTomis_Click(object sender, EventArgs e)
+        {
+            string conStrDbTomis;
+            SqlConnection dbConnTomis;
+            string DomName = "NET";
+            string User = "ag039ag_sa";
+            string Passwd = "WsxEdc99!!@!";
+
+            bool RetVal = LogonUser(User, DomName, Passwd);
+            if (RetVal)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private bool LogonUser(string user, string domName, string passwd)
+        {
+            throw new NotImplementedException();
         }
     }
 }
