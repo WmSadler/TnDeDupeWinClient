@@ -57,7 +57,7 @@
             this.dbSigUri = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabResults = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.deDupeResultsMatrix = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -97,7 +97,7 @@
             this.grpBoxIPPSetup.SuspendLayout();
             this.grpBoxTemplateDbSetup.SuspendLayout();
             this.tabResults.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.deDupeResultsMatrix)).BeginInit();
             this.statusBarMain.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -290,7 +290,7 @@
             this.tabSetup.Location = new System.Drawing.Point(4, 22);
             this.tabSetup.Name = "tabSetup";
             this.tabSetup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSetup.Size = new System.Drawing.Size(1254, 616);
+            this.tabSetup.Size = new System.Drawing.Size(1000, 489);
             this.tabSetup.TabIndex = 1;
             this.tabSetup.Text = "Setup";
             this.tabSetup.UseVisualStyleBackColor = true;
@@ -438,55 +438,62 @@
             // 
             // tabResults
             // 
-            this.tabResults.Controls.Add(this.dataGridView1);
+            this.tabResults.Controls.Add(this.deDupeResultsMatrix);
             this.tabResults.Location = new System.Drawing.Point(4, 22);
             this.tabResults.Name = "tabResults";
             this.tabResults.Padding = new System.Windows.Forms.Padding(3);
-            this.tabResults.Size = new System.Drawing.Size(1254, 616);
+            this.tabResults.Size = new System.Drawing.Size(1000, 489);
             this.tabResults.TabIndex = 2;
             this.tabResults.Text = "DeDupe Results";
             this.tabResults.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // deDupeResultsMatrix
             // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.deDupeResultsMatrix.AllowUserToAddRows = false;
+            this.deDupeResultsMatrix.AllowUserToDeleteRows = false;
+            this.deDupeResultsMatrix.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.deDupeResultsMatrix.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2,
             this.Column1,
             this.Column3,
             this.Column5,
             this.Column4});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1248, 610);
-            this.dataGridView1.TabIndex = 0;
+            this.deDupeResultsMatrix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.deDupeResultsMatrix.Location = new System.Drawing.Point(3, 3);
+            this.deDupeResultsMatrix.Name = "deDupeResultsMatrix";
+            this.deDupeResultsMatrix.ReadOnly = true;
+            this.deDupeResultsMatrix.Size = new System.Drawing.Size(994, 483);
+            this.deDupeResultsMatrix.TabIndex = 0;
             // 
             // Column2
             // 
             this.Column2.HeaderText = "MDM GUID";
             this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // Column1
             // 
             this.Column1.HeaderText = "TOMIS ID";
             this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             // 
             // Column3
             // 
             this.Column3.HeaderText = "Matching Image";
             this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
             // 
             // Column5
             // 
             this.Column5.HeaderText = "Match Confidence";
             this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
             // 
             // Column4
             // 
             this.Column4.HeaderText = "Combine";
             this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
             // 
             // ippEndPtStatLbl
             // 
@@ -679,7 +686,7 @@
             this.grpBoxTemplateDbSetup.ResumeLayout(false);
             this.grpBoxTemplateDbSetup.PerformLayout();
             this.tabResults.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.deDupeResultsMatrix)).EndInit();
             this.statusBarMain.ResumeLayout(false);
             this.statusBarMain.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -717,7 +724,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView deDupeResultsMatrix;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
