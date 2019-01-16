@@ -35,24 +35,24 @@ namespace deDupeTOMIS
         {
             if (FrState.TemplateDbConnected)
             {
-                statusFlagTemplateDb.Text = "CONNECTED";
-                statusFlagTemplateDb.ForeColor = System.Drawing.Color.Green;
+                StatusFlagTemplateDb.Text = "CONNECTED";
+                StatusFlagTemplateDb.ForeColor = System.Drawing.Color.Green;
             }
             else
             {
-                statusFlagTemplateDb.Text = "DISCONNECTED";
-                statusFlagTemplateDb.ForeColor = System.Drawing.Color.Red;
+                StatusFlagTemplateDb.Text = "DISCONNECTED";
+                StatusFlagTemplateDb.ForeColor = System.Drawing.Color.Red;
             }
 
             if (FrState.TomisDbConnected)
             {
-                statusFlagTomisDb.Text = "CONNECTED";
-                statusFlagTomisDb.ForeColor = System.Drawing.Color.Green;
+                StatusFlagTomisDb.Text = "CONNECTED";
+                StatusFlagTomisDb.ForeColor = System.Drawing.Color.Green;
             }
             else
             {
-                statusFlagTomisDb.Text = "DISCONNECTED";
-                statusFlagTomisDb.ForeColor = System.Drawing.Color.Red;
+                StatusFlagTomisDb.Text = "DISCONNECTED";
+                StatusFlagTomisDb.ForeColor = System.Drawing.Color.Red;
             }
         }
 
@@ -80,7 +80,7 @@ namespace deDupeTOMIS
                             case 13:
                                 FrState.imgWorking = imgRaw.Clone();
                                 imgOriginal.Image = FrState.imgWorking.ToBitmap();
-                                btnIdentifyImage.Enabled = true;
+                                BtnIdentifyImage.Enabled = true;
                                 done = true;
                                 break;
                             case 27:
@@ -117,13 +117,13 @@ namespace deDupeTOMIS
                 // display the original image in the app
                 imgOriginal.Image = imgBmp;
                 // allow sending of the image to processing
-                btnIdentifyImage.Enabled = true;
+                BtnIdentifyImage.Enabled = true;
             }
         }
 
         private void ImgOriginal_Click(object sender, EventArgs e)
         {
-            if (btnIdentifyImage.Enabled)
+            if (BtnIdentifyImage.Enabled)
             {
                 BtnIdentifyImage_Click(sender, e);
             }
@@ -297,6 +297,16 @@ namespace deDupeTOMIS
         private void BtnExit_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();
+        }
+
+        private void StatusFlagTomisDb_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void StatusFlagTemplateDb_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -31,11 +31,11 @@
             this.tabDeDupMain = new System.Windows.Forms.TabControl();
             this.tabFacialRecognition = new System.Windows.Forms.TabPage();
             this.splitContainerMainFr = new System.Windows.Forms.SplitContainer();
-            this.btnExit = new System.Windows.Forms.Button();
-            this.btnWebCamStart = new System.Windows.Forms.Button();
-            this.btnIdentifyImage = new System.Windows.Forms.Button();
-            this.btnDeDupStart = new System.Windows.Forms.Button();
-            this.btnImageFromFile = new System.Windows.Forms.Button();
+            this.BtnExit = new System.Windows.Forms.Button();
+            this.BtnWebCamStart = new System.Windows.Forms.Button();
+            this.BtnIdentifyImage = new System.Windows.Forms.Button();
+            this.BtnDeDupStart = new System.Windows.Forms.Button();
+            this.BtnImageFromFile = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.grpImgOriginal = new System.Windows.Forms.GroupBox();
             this.imgOriginal = new System.Windows.Forms.PictureBox();
@@ -55,10 +55,10 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusFlagTomisDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusFlagTomisDb = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusFlagTemplateDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusFlagTemplateDb = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusFlagTomisDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusFlagTomisDb = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusFlagTemplateDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusFlagTemplateDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusBarMain = new System.Windows.Forms.StatusStrip();
             this.tabDeDupMain.SuspendLayout();
             this.tabFacialRecognition.SuspendLayout();
@@ -110,11 +110,11 @@
             // 
             // splitContainerMainFr.Panel1
             // 
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnExit);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnWebCamStart);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnIdentifyImage);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnDeDupStart);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.btnImageFromFile);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnExit);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnWebCamStart);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnIdentifyImage);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnDeDupStart);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnImageFromFile);
             this.splitContainerMainFr.Panel1MinSize = 220;
             // 
             // splitContainerMainFr.Panel2
@@ -126,58 +126,58 @@
             this.splitContainerMainFr.SplitterWidth = 1;
             this.splitContainerMainFr.TabIndex = 0;
             // 
-            // btnExit
+            // BtnExit
             // 
-            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnExit.Location = new System.Drawing.Point(10, 429);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(200, 45);
-            this.btnExit.TabIndex = 10;
-            this.btnExit.Text = "EXIT";
-            this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.BtnExit_Click);
+            this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.BtnExit.Location = new System.Drawing.Point(10, 429);
+            this.BtnExit.Name = "BtnExit";
+            this.BtnExit.Size = new System.Drawing.Size(200, 45);
+            this.BtnExit.TabIndex = 10;
+            this.BtnExit.Text = "EXIT";
+            this.BtnExit.UseVisualStyleBackColor = false;
+            this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
             // 
-            // btnWebCamStart
+            // BtnWebCamStart
             // 
-            this.btnWebCamStart.Location = new System.Drawing.Point(10, 127);
-            this.btnWebCamStart.Name = "btnWebCamStart";
-            this.btnWebCamStart.Size = new System.Drawing.Size(200, 45);
-            this.btnWebCamStart.TabIndex = 9;
-            this.btnWebCamStart.Text = "Get Image From Camera\r\n<ESC> - Exit <CR> - Capture";
-            this.btnWebCamStart.UseVisualStyleBackColor = true;
-            this.btnWebCamStart.Click += new System.EventHandler(this.BtnWebCamStart_Click);
+            this.BtnWebCamStart.Location = new System.Drawing.Point(10, 127);
+            this.BtnWebCamStart.Name = "BtnWebCamStart";
+            this.BtnWebCamStart.Size = new System.Drawing.Size(200, 45);
+            this.BtnWebCamStart.TabIndex = 9;
+            this.BtnWebCamStart.Text = "Get Image From Camera\r\n<ESC> - Exit <CR> - Capture";
+            this.BtnWebCamStart.UseVisualStyleBackColor = true;
+            this.BtnWebCamStart.Click += new System.EventHandler(this.BtnWebCamStart_Click);
             // 
-            // btnIdentifyImage
+            // BtnIdentifyImage
             // 
-            this.btnIdentifyImage.Enabled = false;
-            this.btnIdentifyImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnIdentifyImage.Location = new System.Drawing.Point(10, 178);
-            this.btnIdentifyImage.Name = "btnIdentifyImage";
-            this.btnIdentifyImage.Size = new System.Drawing.Size(200, 45);
-            this.btnIdentifyImage.TabIndex = 8;
-            this.btnIdentifyImage.Text = "Identify Image";
-            this.btnIdentifyImage.UseVisualStyleBackColor = false;
-            this.btnIdentifyImage.Click += new System.EventHandler(this.BtnIdentifyImage_Click);
+            this.BtnIdentifyImage.Enabled = false;
+            this.BtnIdentifyImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.BtnIdentifyImage.Location = new System.Drawing.Point(10, 178);
+            this.BtnIdentifyImage.Name = "BtnIdentifyImage";
+            this.BtnIdentifyImage.Size = new System.Drawing.Size(200, 45);
+            this.BtnIdentifyImage.TabIndex = 8;
+            this.BtnIdentifyImage.Text = "Identify Image";
+            this.BtnIdentifyImage.UseVisualStyleBackColor = false;
+            this.BtnIdentifyImage.Click += new System.EventHandler(this.BtnIdentifyImage_Click);
             // 
-            // btnDeDupStart
+            // BtnDeDupStart
             // 
-            this.btnDeDupStart.Enabled = false;
-            this.btnDeDupStart.Location = new System.Drawing.Point(10, 3);
-            this.btnDeDupStart.Name = "btnDeDupStart";
-            this.btnDeDupStart.Size = new System.Drawing.Size(200, 45);
-            this.btnDeDupStart.TabIndex = 4;
-            this.btnDeDupStart.Text = "Start DeDuplicaiton";
-            this.btnDeDupStart.UseVisualStyleBackColor = true;
+            this.BtnDeDupStart.Enabled = false;
+            this.BtnDeDupStart.Location = new System.Drawing.Point(10, 3);
+            this.BtnDeDupStart.Name = "BtnDeDupStart";
+            this.BtnDeDupStart.Size = new System.Drawing.Size(200, 45);
+            this.BtnDeDupStart.TabIndex = 4;
+            this.BtnDeDupStart.Text = "Start DeDuplicaiton";
+            this.BtnDeDupStart.UseVisualStyleBackColor = true;
             // 
-            // btnImageFromFile
+            // BtnImageFromFile
             // 
-            this.btnImageFromFile.Location = new System.Drawing.Point(10, 76);
-            this.btnImageFromFile.Name = "btnImageFromFile";
-            this.btnImageFromFile.Size = new System.Drawing.Size(200, 45);
-            this.btnImageFromFile.TabIndex = 3;
-            this.btnImageFromFile.Text = "Get Image From File\r\n";
-            this.btnImageFromFile.UseVisualStyleBackColor = true;
-            this.btnImageFromFile.Click += new System.EventHandler(this.BtnImageFromFile_Click);
+            this.BtnImageFromFile.Location = new System.Drawing.Point(10, 76);
+            this.BtnImageFromFile.Name = "BtnImageFromFile";
+            this.BtnImageFromFile.Size = new System.Drawing.Size(200, 45);
+            this.BtnImageFromFile.TabIndex = 3;
+            this.BtnImageFromFile.Text = "Get Image From File\r\n";
+            this.BtnImageFromFile.UseVisualStyleBackColor = true;
+            this.BtnImageFromFile.Click += new System.EventHandler(this.BtnImageFromFile_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -380,38 +380,40 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
-            // statusFlagTomisDbLbl
+            // StatusFlagTomisDbLbl
             // 
-            this.statusFlagTomisDbLbl.Name = "statusFlagTomisDbLbl";
-            this.statusFlagTomisDbLbl.Size = new System.Drawing.Size(62, 17);
-            this.statusFlagTomisDbLbl.Text = "TOMIS db:";
+            this.StatusFlagTomisDbLbl.Name = "StatusFlagTomisDbLbl";
+            this.StatusFlagTomisDbLbl.Size = new System.Drawing.Size(62, 17);
+            this.StatusFlagTomisDbLbl.Text = "TOMIS db:";
             // 
-            // statusFlagTomisDb
+            // StatusFlagTomisDb
             // 
-            this.statusFlagTomisDb.Name = "statusFlagTomisDb";
-            this.statusFlagTomisDb.Size = new System.Drawing.Size(94, 17);
-            this.statusFlagTomisDb.Text = "DISCONNECTED";
+            this.StatusFlagTomisDb.Name = "StatusFlagTomisDb";
+            this.StatusFlagTomisDb.Size = new System.Drawing.Size(94, 17);
+            this.StatusFlagTomisDb.Text = "DISCONNECTED";
+            this.StatusFlagTomisDb.Click += new System.EventHandler(this.StatusFlagTomisDb_Click);
             // 
-            // statusFlagTemplateDbLbl
+            // StatusFlagTemplateDbLbl
             // 
-            this.statusFlagTemplateDbLbl.Name = "statusFlagTemplateDbLbl";
-            this.statusFlagTemplateDbLbl.Size = new System.Drawing.Size(77, 17);
-            this.statusFlagTemplateDbLbl.Text = "Template DB:";
+            this.StatusFlagTemplateDbLbl.Name = "StatusFlagTemplateDbLbl";
+            this.StatusFlagTemplateDbLbl.Size = new System.Drawing.Size(77, 17);
+            this.StatusFlagTemplateDbLbl.Text = "Template DB:";
             // 
-            // statusFlagTemplateDb
+            // StatusFlagTemplateDb
             // 
-            this.statusFlagTemplateDb.Name = "statusFlagTemplateDb";
-            this.statusFlagTemplateDb.Size = new System.Drawing.Size(94, 17);
-            this.statusFlagTemplateDb.Text = "DISCONNECTED";
+            this.StatusFlagTemplateDb.Name = "StatusFlagTemplateDb";
+            this.StatusFlagTemplateDb.Size = new System.Drawing.Size(94, 17);
+            this.StatusFlagTemplateDb.Text = "DISCONNECTED";
+            this.StatusFlagTemplateDb.Click += new System.EventHandler(this.StatusFlagTemplateDb_Click);
             // 
             // statusBarMain
             // 
             this.statusBarMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusBarMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusFlagTomisDbLbl,
-            this.statusFlagTomisDb,
-            this.statusFlagTemplateDbLbl,
-            this.statusFlagTemplateDb});
+            this.StatusFlagTomisDbLbl,
+            this.StatusFlagTomisDb,
+            this.StatusFlagTemplateDbLbl,
+            this.StatusFlagTemplateDb});
             this.statusBarMain.Location = new System.Drawing.Point(0, 515);
             this.statusBarMain.Name = "statusBarMain";
             this.statusBarMain.Size = new System.Drawing.Size(1008, 22);
@@ -459,9 +461,9 @@
         private System.Windows.Forms.GroupBox grpBoxIPPSetup;
         private System.Windows.Forms.Button btnConnectIPP;
         private System.Windows.Forms.SplitContainer splitContainerMainFr;
-        private System.Windows.Forms.Button btnIdentifyImage;
-        private System.Windows.Forms.Button btnDeDupStart;
-        private System.Windows.Forms.Button btnImageFromFile;
+        private System.Windows.Forms.Button BtnIdentifyImage;
+        private System.Windows.Forms.Button BtnDeDupStart;
+        private System.Windows.Forms.Button BtnImageFromFile;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.GroupBox grpImgOriginal;
         private System.Windows.Forms.PictureBox imgOriginal;
@@ -477,13 +479,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.Button btnWebCamStart;
-        private System.Windows.Forms.ToolStripStatusLabel statusFlagTomisDbLbl;
-        private System.Windows.Forms.ToolStripStatusLabel statusFlagTomisDb;
-        private System.Windows.Forms.ToolStripStatusLabel statusFlagTemplateDbLbl;
-        private System.Windows.Forms.ToolStripStatusLabel statusFlagTemplateDb;
+        private System.Windows.Forms.Button BtnWebCamStart;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTomisDbLbl;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTomisDb;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTemplateDbLbl;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTemplateDb;
         private System.Windows.Forms.StatusStrip statusBarMain;
-        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button BtnExit;
     }
 }
 
