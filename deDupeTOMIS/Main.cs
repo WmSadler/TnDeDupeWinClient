@@ -20,9 +20,9 @@ namespace deDupeTOMIS
         public Main()
         {
             InitializeComponent();
-            FrState.ippConnected = false;
-            FrState.templateDbConnected = false;
-            FrState.tomisDbConnected = false;
+            FrState.IppConnected = false;
+            FrState.TemplateDbConnected = false;
+            FrState.TomisDbConnected = false;
             Update_Status();
         }
     
@@ -33,18 +33,7 @@ namespace deDupeTOMIS
 
         public void Update_Status()
         {
-            if (FrState.ippConnected)
-            {
-                statusFlagIPP.Text = "CONNECTED";
-                statusFlagIPP.ForeColor = System.Drawing.Color.Green;
-            }
-            else
-            {
-                statusFlagIPP.Text = "DISCONNECTED";
-                statusFlagIPP.ForeColor = System.Drawing.Color.Red;
-            }
-
-            if (FrState.templateDbConnected)
+            if (FrState.TemplateDbConnected)
             {
                 statusFlagTemplateDb.Text = "CONNECTED";
                 statusFlagTemplateDb.ForeColor = System.Drawing.Color.Green;
@@ -55,7 +44,7 @@ namespace deDupeTOMIS
                 statusFlagTemplateDb.ForeColor = System.Drawing.Color.Red;
             }
 
-            if (FrState.tomisDbConnected)
+            if (FrState.TomisDbConnected)
             {
                 statusFlagTomisDb.Text = "CONNECTED";
                 statusFlagTomisDb.ForeColor = System.Drawing.Color.Green;
@@ -67,7 +56,7 @@ namespace deDupeTOMIS
             }
         }
 
-        private void btnWebCamStart_Click(object sender, EventArgs e)
+        private void BtnWebCamStart_Click(object sender, EventArgs e)
         {
             bool done = false;
             this.Enabled = false;
@@ -108,14 +97,16 @@ namespace deDupeTOMIS
             }
         }
 
-        private void btnImageFromFile_Click(object sender, EventArgs e)
+        private void BtnImageFromFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofDialog = new OpenFileDialog();
-            ofDialog.InitialDirectory = System.IO.Path.GetDirectoryName(Application.StartupPath)+"\\..\\..\\..\\inputImages\\";
-            ofDialog.Filter = "jpeg (*.jpg)|*.jpg|png (*.png)|*.png|All Files (*.*)|*.*";
-            ofDialog.FilterIndex = 1;
-            ofDialog.RestoreDirectory = false;
 
+            OpenFileDialog ofDialog = new OpenFileDialog
+            {
+                InitialDirectory = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\..\\inputImages\\",
+                Filter = "jpeg (*.jpg)|*.jpg|png (*.png)|*.png|All Files (*.*)|*.*",
+                FilterIndex = 1,
+                RestoreDirectory = false
+            };
 
             if (ofDialog.ShowDialog() == DialogResult.OK)
             {
@@ -130,15 +121,15 @@ namespace deDupeTOMIS
             }
         }
 
-        private void imgOriginal_Click(object sender, EventArgs e)
+        private void ImgOriginal_Click(object sender, EventArgs e)
         {
             if (btnIdentifyImage.Enabled)
             {
-                btnIdentifyImage_Click(sender, e);
+                BtnIdentifyImage_Click(sender, e);
             }
         }
 
-        private void btnIdentifyImage_Click(object sender, EventArgs e)
+        private void BtnIdentifyImage_Click(object sender, EventArgs e)
         {
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
             imgProcessed.Update();
@@ -303,33 +294,9 @@ namespace deDupeTOMIS
             }
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        private void BtnExit_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();
-        }
-
-        private void btnConnectToTomis_Click(object sender, EventArgs e)
-        {
-            string conStrDbTomis;
-            SqlConnection dbConnTomis;
-            string DomName = "NET";
-            string User = "ag039ag_sa";
-            string Passwd = "WsxEdc99!!@!";
-
-            bool RetVal = LogonUser(User, DomName, Passwd);
-            if (RetVal)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-
-        private bool LogonUser(string user, string domName, string passwd)
-        {
-            throw new NotImplementedException();
         }
     }
 }
