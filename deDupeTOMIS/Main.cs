@@ -31,6 +31,28 @@ namespace deDupeTOMIS
             Update_Status();
         }
 
+        public class TOMISDb
+        {
+
+        }
+
+        public class AESDb
+        {
+
+        }
+
+        public bool ConnectTemplateDb()
+        {
+            FrState.TemplateDbConnected = true;
+            return (FrState.TemplateDbConnected);
+        }
+
+        public bool DisconnectTemplateDb()
+        {
+            FrState.TemplateDbConnected = false;
+            return (FrState.TemplateDbConnected);
+        }
+
         public void Update_Status()
         {
             if (FrState.TemplateDbConnected)
@@ -53,6 +75,17 @@ namespace deDupeTOMIS
             {
                 StatusFlagTomisDb.Text = "DISCONNECTED";
                 StatusFlagTomisDb.ForeColor = System.Drawing.Color.Red;
+            }
+
+            if (FrState.AESDbConnected)
+            {
+                StatusFlagAESDb.Text = "CONNECTED";
+                StatusFlagAESDb.ForeColor = System.Drawing.Color.Green;
+            }
+            else
+            {
+                StatusFlagAESDb.Text = "DISCONNECTED";
+                StatusFlagAESDb.ForeColor = System.Drawing.Color.Red;
             }
         }
 
@@ -301,10 +334,25 @@ namespace deDupeTOMIS
 
         private void StatusFlagTomisDb_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void StatusFlagTemplateDb_Click(object sender, EventArgs e)
+        {
+            if (FrState.TemplateDbConnected)
+            {
+                MessageBox.Show("Disconnect From Template DB?","Connection Request");
+                DisconnectTemplateDb();
+            }
+            else
+            {
+                MessageBox.Show("Connect To Template DB?","Connection Request");
+                ConnectTemplateDb();
+            }
+            Update_Status();
+        }
+
+        private void StatusFlagAESDb_Click(object sender, EventArgs e)
         {
 
         }

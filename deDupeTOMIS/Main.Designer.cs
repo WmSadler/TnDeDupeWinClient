@@ -60,6 +60,8 @@
             this.StatusFlagTemplateDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusFlagTemplateDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusBarMain = new System.Windows.Forms.StatusStrip();
+            this.StatusFlagAESDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.StatusFlagAESDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabDeDupMain.SuspendLayout();
             this.tabFacialRecognition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMainFr)).BeginInit();
@@ -412,12 +414,26 @@
             this.statusBarMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusFlagTomisDbLbl,
             this.StatusFlagTomisDb,
+            this.StatusFlagAESDbLbl,
+            this.StatusFlagAESDb,
             this.StatusFlagTemplateDbLbl,
             this.StatusFlagTemplateDb});
             this.statusBarMain.Location = new System.Drawing.Point(0, 515);
             this.statusBarMain.Name = "statusBarMain";
             this.statusBarMain.Size = new System.Drawing.Size(1008, 22);
             this.statusBarMain.TabIndex = 0;
+            // 
+            // StatusFlagAESDbLbl
+            // 
+            this.StatusFlagAESDbLbl.Name = "StatusFlagAESDbLbl";
+            this.StatusFlagAESDbLbl.Size = new System.Drawing.Size(47, 17);
+            this.StatusFlagAESDbLbl.Text = "AES db:";
+            // 
+            // StatusFlagAESDb
+            // 
+            this.StatusFlagAESDb.Name = "StatusFlagAESDb";
+            this.StatusFlagAESDb.Size = new System.Drawing.Size(94, 17);
+            this.StatusFlagAESDb.Text = "DISCONNECTED";
             // 
             // Main
             // 
@@ -486,6 +502,8 @@
         private System.Windows.Forms.ToolStripStatusLabel StatusFlagTemplateDb;
         private System.Windows.Forms.StatusStrip statusBarMain;
         private System.Windows.Forms.Button BtnExit;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagAESDbLbl;
+        private System.Windows.Forms.ToolStripStatusLabel StatusFlagAESDb;
     }
 }
 

@@ -11,6 +11,7 @@ namespace deDupeTOMIS
         public static bool LoggedIn { get; set; }
         public static bool IppConnected { get; set; }
         public static bool TomisDbConnected { get; set; }
+        public static bool AESDbConnected { get; set; }
         public static bool TemplateDbConnected { get; set; }
     }
 
