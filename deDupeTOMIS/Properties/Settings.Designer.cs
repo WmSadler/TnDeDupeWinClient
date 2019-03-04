@@ -32,5 +32,16 @@ namespace deDupeTOMIS.Properties {
                 return ((string)(this["FrTemplatesConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True" +
+            "")]
+        public string FrTempSrcCopyConnectionString {
+            get {
+                return ((string)(this["FrTempSrcCopyConnectionString"]));
+            }
+        }
     }
 }

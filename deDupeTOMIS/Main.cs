@@ -20,9 +20,7 @@ namespace deDupeTOMIS
         public Main()
         {
             InitializeComponent();
-            FrState.IppConnected = false;
-            FrState.TemplateDbConnected = false;
-            FrState.TomisDbConnected = false;
+            FrState.TemplateTrained = false;
             Update_Status();
         }
     
@@ -41,55 +39,27 @@ namespace deDupeTOMIS
 
         }
 
-        public bool ConnectTemplateDb()
+        public bool TemplateDbTrained()
         {
-            FrState.TemplateDbConnected = true;
-            return (FrState.TemplateDbConnected);
-        }
-
-        public bool DisconnectTemplateDb()
-        {
-            FrState.TemplateDbConnected = false;
-            return (FrState.TemplateDbConnected);
+            FrState.TemplateTrained = true;
+            return (FrState.TemplateTrained);
         }
 
         public void Update_Status()
         {
-            if (FrState.TemplateDbConnected)
+            if (FrState.TemplateTrained)
             {
-                StatusFlagTemplateDb.Text = "CONNECTED";
+                StatusFlagTemplateDb.Text = "TRAINED";
                 StatusFlagTemplateDb.ForeColor = System.Drawing.Color.Green;
             }
             else
             {
-                StatusFlagTemplateDb.Text = "DISCONNECTED";
+                StatusFlagTemplateDb.Text = "UNTRAINED";
                 StatusFlagTemplateDb.ForeColor = System.Drawing.Color.Red;
-            }
-
-            if (FrState.TomisDbConnected)
-            {
-                StatusFlagTomisDb.Text = "CONNECTED";
-                StatusFlagTomisDb.ForeColor = System.Drawing.Color.Green;
-            }
-            else
-            {
-                StatusFlagTomisDb.Text = "DISCONNECTED";
-                StatusFlagTomisDb.ForeColor = System.Drawing.Color.Red;
-            }
-
-            if (FrState.AESDbConnected)
-            {
-                StatusFlagAESDb.Text = "CONNECTED";
-                StatusFlagAESDb.ForeColor = System.Drawing.Color.Green;
-            }
-            else
-            {
-                StatusFlagAESDb.Text = "DISCONNECTED";
-                StatusFlagAESDb.ForeColor = System.Drawing.Color.Red;
             }
         }
 
-        private void BtnWebCamStart_Click(object sender, EventArgs e)
+        private void btnWebCamStart_Click(object sender, EventArgs e)
         {
             bool done = false;
             this.Enabled = false;
@@ -113,7 +83,6 @@ namespace deDupeTOMIS
                             case 13:
                                 FrState.imgWorking = imgRaw.Clone();
                                 imgOriginal.Image = FrState.imgWorking.ToBitmap();
-                                BtnIdentifyImage.Enabled = true;
                                 done = true;
                                 break;
                             case 27:
@@ -130,7 +99,7 @@ namespace deDupeTOMIS
             }
         }
 
-        private void BtnImageFromFile_Click(object sender, EventArgs e)
+        private void btnImageFromFile_Click(object sender, EventArgs e)
         {
 
             OpenFileDialog ofDialog = new OpenFileDialog
@@ -149,16 +118,6 @@ namespace deDupeTOMIS
                 FrState.imgWorking = BitmapConverter.ToMat(imgBmp);
                 // display the original image in the app
                 imgOriginal.Image = imgBmp;
-                // allow sending of the image to processing
-                BtnIdentifyImage.Enabled = true;
-            }
-        }
-
-        private void ImgOriginal_Click(object sender, EventArgs e)
-        {
-            if (BtnIdentifyImage.Enabled)
-            {
-                BtnIdentifyImage_Click(sender, e);
             }
         }
 
@@ -332,27 +291,61 @@ namespace deDupeTOMIS
             System.Windows.Forms.Application.Exit();
         }
 
-        private void StatusFlagTomisDb_Click(object sender, EventArgs e)
+        private void btnTrainTemplates_Click(object sender, EventArgs e)
         {
-            
+            DateTime timeStart, timeEnd;
+
+            SqlConnection cnn;
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+
+            // set connection parameters
+            String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
+            //String sql = "select top (500) * from prod.ADL800;";
+            //String sql = "select top (500) a.* " +
+            String sql = "select a.* " +
+            "from prod.ADL800 a " +
+                "join ( select ID_TOMIS, count(*) as countDup " +
+                    "from prod.ADL800 " +
+                    "group by ID_TOMIS) b " +
+                "on a.ID_TOMIS = b.ID_TOMIS " +
+                "order by countDup DESC, ID_TOMIS ASC, DTE_IMG_TKEN ASC;";
+            //open db connection
+            cnn = new SqlConnection(connectionString);
+            cnn.Open();
+            command = new SqlCommand(sql, cnn);
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            if (dataReader.HasRows)
+            {
+                timeStart = DateTime.Now;
+                timeStartDisplay.Text = timeStart.ToLongTimeString ();
+                timeStartDisplay.Refresh();
+                while (dataReader.Read())
+                {
+                    Image img;
+                    tomisID.Text = dataReader["ID_TOMIS"].ToString();
+                    tomisID.Refresh();
+                    img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
+                    imgOriginal.Image = img;
+                    imgOriginal.Refresh();
+                    //System.Threading.Thread.Sleep(500);
+                }
+                timeEnd = DateTime.Now;
+                timeEndDisplay.Text = timeEnd.ToLongTimeString();
+                TimeSpan timeElapsed = timeEnd - timeStart;
+                timeElapsedDisplay.Text = timeElapsed.ToString(@"hh\:mm\:ss\:ff");
+            }
+            cnn.Close();
+            FrState.TemplateTrained = true;
         }
 
-        private void StatusFlagTemplateDb_Click(object sender, EventArgs e)
+        private void btnDedupDb_Click(object sender, EventArgs e)
         {
-            if (FrState.TemplateDbConnected)
-            {
-                MessageBox.Show("Disconnect From Template DB?","Connection Request");
-                DisconnectTemplateDb();
-            }
-            else
-            {
-                MessageBox.Show("Connect To Template DB?","Connection Request");
-                ConnectTemplateDb();
-            }
-            Update_Status();
+
         }
 
-        private void StatusFlagAESDb_Click(object sender, EventArgs e)
+        private void btnFindImage_Click(object sender, EventArgs e)
         {
 
         }

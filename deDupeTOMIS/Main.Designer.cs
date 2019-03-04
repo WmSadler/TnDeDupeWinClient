@@ -31,11 +31,20 @@
             this.tabDeDupMain = new System.Windows.Forms.TabControl();
             this.tabFacialRecognition = new System.Windows.Forms.TabPage();
             this.splitContainerMainFr = new System.Windows.Forms.SplitContainer();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnDedupDb = new System.Windows.Forms.Button();
+            this.btnFindImage = new System.Windows.Forms.Button();
+            this.timeElapsedDisplay = new System.Windows.Forms.TextBox();
+            this.timeStartDisplay = new System.Windows.Forms.TextBox();
+            this.timeEndDisplay = new System.Windows.Forms.TextBox();
+            this.tomisID = new System.Windows.Forms.TextBox();
+            this.btnTrainTemplates = new System.Windows.Forms.Button();
             this.BtnExit = new System.Windows.Forms.Button();
-            this.BtnWebCamStart = new System.Windows.Forms.Button();
-            this.BtnIdentifyImage = new System.Windows.Forms.Button();
-            this.BtnDeDupStart = new System.Windows.Forms.Button();
-            this.BtnImageFromFile = new System.Windows.Forms.Button();
+            this.btnWebCamStart = new System.Windows.Forms.Button();
+            this.btnImageFromFile = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.grpImgOriginal = new System.Windows.Forms.GroupBox();
             this.imgOriginal = new System.Windows.Forms.PictureBox();
@@ -55,13 +64,9 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StatusFlagTomisDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusFlagTomisDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusFlagTemplateDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusFlagTemplateDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusBarMain = new System.Windows.Forms.StatusStrip();
-            this.StatusFlagAESDbLbl = new System.Windows.Forms.ToolStripStatusLabel();
-            this.StatusFlagAESDb = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabDeDupMain.SuspendLayout();
             this.tabFacialRecognition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMainFr)).BeginInit();
@@ -112,11 +117,20 @@
             // 
             // splitContainerMainFr.Panel1
             // 
+            this.splitContainerMainFr.Panel1.Controls.Add(this.label4);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.label3);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.label2);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.label1);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.btnDedupDb);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.btnFindImage);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.timeElapsedDisplay);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.timeStartDisplay);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.timeEndDisplay);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.tomisID);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.btnTrainTemplates);
             this.splitContainerMainFr.Panel1.Controls.Add(this.BtnExit);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnWebCamStart);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnIdentifyImage);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnDeDupStart);
-            this.splitContainerMainFr.Panel1.Controls.Add(this.BtnImageFromFile);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.btnWebCamStart);
+            this.splitContainerMainFr.Panel1.Controls.Add(this.btnImageFromFile);
             this.splitContainerMainFr.Panel1MinSize = 220;
             // 
             // splitContainerMainFr.Panel2
@@ -128,8 +142,116 @@
             this.splitContainerMainFr.SplitterWidth = 1;
             this.splitContainerMainFr.TabIndex = 0;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 95);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 21;
+            this.label4.Text = "Start Time";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 121);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "End Time";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 147);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Total Time";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 69);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "TOMIS ID";
+            // 
+            // btnDedupDb
+            // 
+            this.btnDedupDb.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnDedupDb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDedupDb.Location = new System.Drawing.Point(10, 170);
+            this.btnDedupDb.Name = "btnDedupDb";
+            this.btnDedupDb.Size = new System.Drawing.Size(200, 43);
+            this.btnDedupDb.TabIndex = 17;
+            this.btnDedupDb.Text = "De-Duplicate";
+            this.btnDedupDb.UseVisualStyleBackColor = false;
+            this.btnDedupDb.Click += new System.EventHandler(this.btnDedupDb_Click);
+            // 
+            // btnFindImage
+            // 
+            this.btnFindImage.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnFindImage.Location = new System.Drawing.Point(10, 362);
+            this.btnFindImage.Name = "btnFindImage";
+            this.btnFindImage.Size = new System.Drawing.Size(200, 45);
+            this.btnFindImage.TabIndex = 16;
+            this.btnFindImage.Text = "Find Image";
+            this.btnFindImage.UseVisualStyleBackColor = false;
+            this.btnFindImage.Click += new System.EventHandler(this.btnFindImage_Click);
+            // 
+            // timeElapsedDisplay
+            // 
+            this.timeElapsedDisplay.Location = new System.Drawing.Point(69, 144);
+            this.timeElapsedDisplay.Name = "timeElapsedDisplay";
+            this.timeElapsedDisplay.Size = new System.Drawing.Size(141, 20);
+            this.timeElapsedDisplay.TabIndex = 15;
+            this.timeElapsedDisplay.Text = "00:00:00:00";
+            this.timeElapsedDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // timeStartDisplay
+            // 
+            this.timeStartDisplay.Location = new System.Drawing.Point(69, 92);
+            this.timeStartDisplay.Name = "timeStartDisplay";
+            this.timeStartDisplay.Size = new System.Drawing.Size(141, 20);
+            this.timeStartDisplay.TabIndex = 14;
+            this.timeStartDisplay.Text = "00:00:00";
+            this.timeStartDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // timeEndDisplay
+            // 
+            this.timeEndDisplay.Location = new System.Drawing.Point(69, 118);
+            this.timeEndDisplay.Name = "timeEndDisplay";
+            this.timeEndDisplay.Size = new System.Drawing.Size(141, 20);
+            this.timeEndDisplay.TabIndex = 13;
+            this.timeEndDisplay.Text = "00:00:00";
+            this.timeEndDisplay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tomisID
+            // 
+            this.tomisID.Location = new System.Drawing.Point(69, 66);
+            this.tomisID.Name = "tomisID";
+            this.tomisID.Size = new System.Drawing.Size(141, 20);
+            this.tomisID.TabIndex = 12;
+            this.tomisID.Text = "NA";
+            this.tomisID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // btnTrainTemplates
+            // 
+            this.btnTrainTemplates.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnTrainTemplates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTrainTemplates.Location = new System.Drawing.Point(10, 17);
+            this.btnTrainTemplates.Name = "btnTrainTemplates";
+            this.btnTrainTemplates.Size = new System.Drawing.Size(200, 43);
+            this.btnTrainTemplates.TabIndex = 11;
+            this.btnTrainTemplates.Text = "Train Templates";
+            this.btnTrainTemplates.UseVisualStyleBackColor = false;
+            this.btnTrainTemplates.Click += new System.EventHandler(this.btnTrainTemplates_Click);
+            // 
             // BtnExit
             // 
+            this.BtnExit.BackColor = System.Drawing.Color.Gainsboro;
             this.BtnExit.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.BtnExit.Location = new System.Drawing.Point(10, 429);
             this.BtnExit.Name = "BtnExit";
@@ -139,47 +261,27 @@
             this.BtnExit.UseVisualStyleBackColor = false;
             this.BtnExit.Click += new System.EventHandler(this.BtnExit_Click);
             // 
-            // BtnWebCamStart
+            // btnWebCamStart
             // 
-            this.BtnWebCamStart.Location = new System.Drawing.Point(10, 127);
-            this.BtnWebCamStart.Name = "BtnWebCamStart";
-            this.BtnWebCamStart.Size = new System.Drawing.Size(200, 45);
-            this.BtnWebCamStart.TabIndex = 9;
-            this.BtnWebCamStart.Text = "Get Image From Camera\r\n<ESC> - Exit <CR> - Capture";
-            this.BtnWebCamStart.UseVisualStyleBackColor = true;
-            this.BtnWebCamStart.Click += new System.EventHandler(this.BtnWebCamStart_Click);
+            this.btnWebCamStart.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnWebCamStart.Location = new System.Drawing.Point(10, 311);
+            this.btnWebCamStart.Name = "btnWebCamStart";
+            this.btnWebCamStart.Size = new System.Drawing.Size(200, 45);
+            this.btnWebCamStart.TabIndex = 9;
+            this.btnWebCamStart.Text = "Get Image From Camera\r\n<ESC> - Exit <CR> - Capture";
+            this.btnWebCamStart.UseVisualStyleBackColor = false;
+            this.btnWebCamStart.Click += new System.EventHandler(this.btnWebCamStart_Click);
             // 
-            // BtnIdentifyImage
+            // btnImageFromFile
             // 
-            this.BtnIdentifyImage.Enabled = false;
-            this.BtnIdentifyImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.BtnIdentifyImage.Location = new System.Drawing.Point(10, 178);
-            this.BtnIdentifyImage.Name = "BtnIdentifyImage";
-            this.BtnIdentifyImage.Size = new System.Drawing.Size(200, 45);
-            this.BtnIdentifyImage.TabIndex = 8;
-            this.BtnIdentifyImage.Text = "Identify Image";
-            this.BtnIdentifyImage.UseVisualStyleBackColor = false;
-            this.BtnIdentifyImage.Click += new System.EventHandler(this.BtnIdentifyImage_Click);
-            // 
-            // BtnDeDupStart
-            // 
-            this.BtnDeDupStart.Enabled = false;
-            this.BtnDeDupStart.Location = new System.Drawing.Point(10, 3);
-            this.BtnDeDupStart.Name = "BtnDeDupStart";
-            this.BtnDeDupStart.Size = new System.Drawing.Size(200, 45);
-            this.BtnDeDupStart.TabIndex = 4;
-            this.BtnDeDupStart.Text = "Start DeDuplicaiton";
-            this.BtnDeDupStart.UseVisualStyleBackColor = true;
-            // 
-            // BtnImageFromFile
-            // 
-            this.BtnImageFromFile.Location = new System.Drawing.Point(10, 76);
-            this.BtnImageFromFile.Name = "BtnImageFromFile";
-            this.BtnImageFromFile.Size = new System.Drawing.Size(200, 45);
-            this.BtnImageFromFile.TabIndex = 3;
-            this.BtnImageFromFile.Text = "Get Image From File\r\n";
-            this.BtnImageFromFile.UseVisualStyleBackColor = true;
-            this.BtnImageFromFile.Click += new System.EventHandler(this.BtnImageFromFile_Click);
+            this.btnImageFromFile.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnImageFromFile.Location = new System.Drawing.Point(10, 260);
+            this.btnImageFromFile.Name = "btnImageFromFile";
+            this.btnImageFromFile.Size = new System.Drawing.Size(200, 45);
+            this.btnImageFromFile.TabIndex = 3;
+            this.btnImageFromFile.Text = "Get Image From File\r\n";
+            this.btnImageFromFile.UseVisualStyleBackColor = false;
+            this.btnImageFromFile.Click += new System.EventHandler(this.btnImageFromFile_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -221,7 +323,6 @@
             this.imgOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgOriginal.TabIndex = 0;
             this.imgOriginal.TabStop = false;
-            this.imgOriginal.Click += new System.EventHandler(this.ImgOriginal_Click);
             // 
             // grpImgModified
             // 
@@ -382,19 +483,6 @@
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
             // 
-            // StatusFlagTomisDbLbl
-            // 
-            this.StatusFlagTomisDbLbl.Name = "StatusFlagTomisDbLbl";
-            this.StatusFlagTomisDbLbl.Size = new System.Drawing.Size(62, 17);
-            this.StatusFlagTomisDbLbl.Text = "TOMIS db:";
-            // 
-            // StatusFlagTomisDb
-            // 
-            this.StatusFlagTomisDb.Name = "StatusFlagTomisDb";
-            this.StatusFlagTomisDb.Size = new System.Drawing.Size(94, 17);
-            this.StatusFlagTomisDb.Text = "DISCONNECTED";
-            this.StatusFlagTomisDb.Click += new System.EventHandler(this.StatusFlagTomisDb_Click);
-            // 
             // StatusFlagTemplateDbLbl
             // 
             this.StatusFlagTemplateDbLbl.Name = "StatusFlagTemplateDbLbl";
@@ -404,36 +492,19 @@
             // StatusFlagTemplateDb
             // 
             this.StatusFlagTemplateDb.Name = "StatusFlagTemplateDb";
-            this.StatusFlagTemplateDb.Size = new System.Drawing.Size(94, 17);
-            this.StatusFlagTemplateDb.Text = "DISCONNECTED";
-            this.StatusFlagTemplateDb.Click += new System.EventHandler(this.StatusFlagTemplateDb_Click);
+            this.StatusFlagTemplateDb.Size = new System.Drawing.Size(72, 17);
+            this.StatusFlagTemplateDb.Text = "UNTRAINED";
             // 
             // statusBarMain
             // 
             this.statusBarMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusBarMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StatusFlagTomisDbLbl,
-            this.StatusFlagTomisDb,
-            this.StatusFlagAESDbLbl,
-            this.StatusFlagAESDb,
             this.StatusFlagTemplateDbLbl,
             this.StatusFlagTemplateDb});
             this.statusBarMain.Location = new System.Drawing.Point(0, 515);
             this.statusBarMain.Name = "statusBarMain";
             this.statusBarMain.Size = new System.Drawing.Size(1008, 22);
             this.statusBarMain.TabIndex = 0;
-            // 
-            // StatusFlagAESDbLbl
-            // 
-            this.StatusFlagAESDbLbl.Name = "StatusFlagAESDbLbl";
-            this.StatusFlagAESDbLbl.Size = new System.Drawing.Size(47, 17);
-            this.StatusFlagAESDbLbl.Text = "AES db:";
-            // 
-            // StatusFlagAESDb
-            // 
-            this.StatusFlagAESDb.Name = "StatusFlagAESDb";
-            this.StatusFlagAESDb.Size = new System.Drawing.Size(94, 17);
-            this.StatusFlagAESDb.Text = "DISCONNECTED";
             // 
             // Main
             // 
@@ -449,6 +520,7 @@
             this.tabDeDupMain.ResumeLayout(false);
             this.tabFacialRecognition.ResumeLayout(false);
             this.splitContainerMainFr.Panel1.ResumeLayout(false);
+            this.splitContainerMainFr.Panel1.PerformLayout();
             this.splitContainerMainFr.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMainFr)).EndInit();
             this.splitContainerMainFr.ResumeLayout(false);
@@ -477,9 +549,7 @@
         private System.Windows.Forms.GroupBox grpBoxIPPSetup;
         private System.Windows.Forms.Button btnConnectIPP;
         private System.Windows.Forms.SplitContainer splitContainerMainFr;
-        private System.Windows.Forms.Button BtnIdentifyImage;
-        private System.Windows.Forms.Button BtnDeDupStart;
-        private System.Windows.Forms.Button BtnImageFromFile;
+        private System.Windows.Forms.Button btnImageFromFile;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.GroupBox grpImgOriginal;
         private System.Windows.Forms.PictureBox imgOriginal;
@@ -495,15 +565,22 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.Button BtnWebCamStart;
-        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTomisDbLbl;
-        private System.Windows.Forms.ToolStripStatusLabel StatusFlagTomisDb;
+        private System.Windows.Forms.Button btnWebCamStart;
         private System.Windows.Forms.ToolStripStatusLabel StatusFlagTemplateDbLbl;
         private System.Windows.Forms.ToolStripStatusLabel StatusFlagTemplateDb;
         private System.Windows.Forms.StatusStrip statusBarMain;
         private System.Windows.Forms.Button BtnExit;
-        private System.Windows.Forms.ToolStripStatusLabel StatusFlagAESDbLbl;
-        private System.Windows.Forms.ToolStripStatusLabel StatusFlagAESDb;
+        private System.Windows.Forms.Button btnTrainTemplates;
+        private System.Windows.Forms.TextBox tomisID;
+        private System.Windows.Forms.TextBox timeStartDisplay;
+        private System.Windows.Forms.TextBox timeEndDisplay;
+        private System.Windows.Forms.TextBox timeElapsedDisplay;
+        private System.Windows.Forms.Button btnFindImage;
+        private System.Windows.Forms.Button btnDedupDb;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -4,15 +4,9 @@ namespace deDupeTOMIS
 {
     public static class FrState
     {
-        public static string UserId;
-        public static string Password;
         public static Mat imgWorking;
 
-        public static bool LoggedIn { get; set; }
-        public static bool IppConnected { get; set; }
-        public static bool TomisDbConnected { get; set; }
-        public static bool AESDbConnected { get; set; }
-        public static bool TemplateDbConnected { get; set; }
+        public static bool TemplateTrained { get; set; }
     }
 
     public class C
