@@ -8,8 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OpenCvSharp;
+using cv = OpenCvSharp;
 using OpenCvSharp.Extensions;
+using T = Tesseract;
 
 
 namespace deDupeTOMIS
@@ -26,17 +27,8 @@ namespace deDupeTOMIS
     
         private void Form1_Load(object sender, EventArgs e)
         {
+            findImageProgressBar.Enabled = false;
             Update_Status();
-        }
-
-        public class TOMISDb
-        {
-
-        }
-
-        public class AESDb
-        {
-
         }
 
         public bool TemplateDbTrained()
@@ -59,14 +51,14 @@ namespace deDupeTOMIS
             }
         }
 
-        private void btnWebCamStart_Click(object sender, EventArgs e)
+        private void BtnWebCamStart_Click(object sender, EventArgs e)
         {
             bool done = false;
             this.Enabled = false;
 
-            VideoCapture capDev = new VideoCapture(0);
-            Window vidPreview = new Window("Video Preview");
-            Mat imgRaw = new Mat();
+            cv::VideoCapture capDev = new cv::VideoCapture(0);
+            cv::Window vidPreview = new cv::Window("Video Preview");
+            cv::Mat imgRaw = new cv::Mat();
 
             //using (VideoCapture capDev = new VideoCapture(0))
             //using (Window vidPreview = new Window("Video Preview"))
@@ -78,7 +70,7 @@ namespace deDupeTOMIS
                     if (!imgRaw.Empty())
                     {
                         vidPreview.ShowImage(imgRaw);
-                        switch (Cv2.WaitKey(100))
+                        switch (cv::Cv2.WaitKey(100))
                         {
                             case 13:
                                 FrState.imgWorking = imgRaw.Clone();
@@ -99,7 +91,7 @@ namespace deDupeTOMIS
             }
         }
 
-        private void btnImageFromFile_Click(object sender, EventArgs e)
+        private void BtnImageFromFile_Click(object sender, EventArgs e)
         {
 
             OpenFileDialog ofDialog = new OpenFileDialog
@@ -121,25 +113,25 @@ namespace deDupeTOMIS
             }
         }
 
-        private void BtnIdentifyImage_Click(object sender, EventArgs e)
+        private void IdentifyImage(object sender, EventArgs e)
         {
             imgProcessed.Image = FrState.imgWorking.ToBitmap();
             imgProcessed.Update();
 
-            Mat imgProc = FrState.imgWorking.Clone();
-            Mat imgFinal = FrState.imgWorking.Clone();
+            cv::Mat imgProc = FrState.imgWorking.Clone();
+            cv::Mat imgFinal = FrState.imgWorking.Clone();
 
             String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
 
-            CascadeClassifier faceC = new CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
-            CascadeClassifier eyeL = new CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
-            CascadeClassifier eyeR = new CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
-            CascadeClassifier eyes = new CascadeClassifier(haarLocation + "haarcascade_eye.xml");
+            cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
+            cv::CascadeClassifier eyeL = new cv::CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
+            cv::CascadeClassifier eyeR = new cv::CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
+            cv::CascadeClassifier eyes = new cv::CascadeClassifier(haarLocation + "haarcascade_eye.xml");
 
-            Rect[] faces;
-            Rect[] eyeLeft;
-            Rect[] eyeRight;
-            Rect[] eyeBoth;
+            cv::Rect[] faces;
+            cv::Rect[] eyeLeft;
+            cv::Rect[] eyeRight;
+            cv::Rect[] eyeBoth;
 
             float imgArea = imgProc.Rows * imgProc.Cols;
             float faceWidth = (float)(System.Math.Sqrt(imgArea / C.phi));
@@ -150,10 +142,10 @@ namespace deDupeTOMIS
             int detectEyeHeight = (int)System.Math.Round(detectHeight * 0.125);
             int detectEyeWidth = (int)System.Math.Round(detectEyeHeight * C.phi);
 
-            faces = faceC.DetectMultiScale(imgProc,1.1, 2, HaarDetectionType.DoCannyPruning,new OpenCvSharp.Size(detectEyeWidth,detectEyeHeight));
-            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
-            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
-            eyeBoth = eyes.DetectMultiScale(imgProc, 1.1, 2, HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            faces = faceC.DetectMultiScale(imgProc,1.1, 2, cv::HaarDetectionType.DoCannyPruning,new OpenCvSharp.Size(detectEyeWidth,detectEyeHeight));
+            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            eyeBoth = eyes.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
 
             // find biggest detected face
             int faceIdx = 0;
@@ -172,7 +164,7 @@ namespace deDupeTOMIS
                     }
                 }
                 //Find Center of detected Face
-                Rect faceI = faces[faceIdx];
+                cv::Rect faceI = faces[faceIdx];
                 OpenCvSharp.Point ctr = new OpenCvSharp.Point(faceI.X + (faceI.Width / 2), faceI.Y + (faceI.Height / 2));
 
                 OpenCvSharp.Point[] eyeLctrs = new OpenCvSharp.Point[eyeLeft.Length];
@@ -273,7 +265,7 @@ namespace deDupeTOMIS
                 imgProc.Ellipse(faceE, ScWhite, 8);
                 imgProcessed.Image = imgProc.ToBitmap();
 
-                Mat imgResize = imgProc.Clone(faceRect);
+                cv::Mat imgResize = imgProc.Clone(faceRect);
                 OpenCvSharp.Size newSize = new OpenCvSharp.Size(960,1440);
                 imgResize.Resize(newSize);
                 imgProcessed.Image = imgResize.ToBitmap();
@@ -291,7 +283,7 @@ namespace deDupeTOMIS
             System.Windows.Forms.Application.Exit();
         }
 
-        private void btnTrainTemplates_Click(object sender, EventArgs e)
+        private void BtnTrainTemplates_Click(object sender, EventArgs e)
         {
             DateTime timeStart, timeEnd;
 
@@ -301,9 +293,7 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            //String sql = "select top (500) * from prod.ADL800;";
-            //String sql = "select top (500) a.* " +
-            String sql = "select a.* " +
+            String sql = "select top (500) a.* " +
             "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
@@ -319,8 +309,49 @@ namespace deDupeTOMIS
             if (dataReader.HasRows)
             {
                 timeStart = DateTime.Now;
-                timeStartDisplay.Text = timeStart.ToLongTimeString ();
+                timeStartDisplay.Text = timeStart.ToLongTimeString();
                 timeStartDisplay.Refresh();
+                while (dataReader.Read())
+                {
+                    Image img;
+                    tomisID.Text = dataReader["ID_TOMIS"].ToString();
+                    tomisID.Refresh();
+                    img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
+                }
+                timeEnd = DateTime.Now;
+                timeEndDisplay.Text = timeEnd.ToLongTimeString();
+                TimeSpan timeElapsed = timeEnd - timeStart;
+                timeElapsedDisplay.Text = timeElapsed.ToString(@"hh\:mm\:ss\.ff");
+            }
+            cnn.Close();
+
+            FrState.TemplateTrained = true;
+            Update_Status();
+        }
+
+        private void BtnDedupDb_Click(object sender, EventArgs e)
+        {
+            SqlConnection cnn;
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+
+            // set connection parameters
+            String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
+            String sql = "select top (500) a.* " +
+            "from prod.ADL800 a " +
+                "join ( select ID_TOMIS, count(*) as countDup " +
+                    "from prod.ADL800 " +
+                    "group by ID_TOMIS) b " +
+                "on a.ID_TOMIS = b.ID_TOMIS " +
+                "order by countDup DESC, ID_TOMIS ASC, DTE_IMG_TKEN ASC;";
+            //open db connection
+            cnn = new SqlConnection(connectionString);
+            cnn.Open();
+            command = new SqlCommand(sql, cnn);
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            if (dataReader.HasRows)
+            {
                 while (dataReader.Read())
                 {
                     Image img;
@@ -329,25 +360,61 @@ namespace deDupeTOMIS
                     img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
                     imgOriginal.Image = img;
                     imgOriginal.Refresh();
-                    //System.Threading.Thread.Sleep(500);
                 }
-                timeEnd = DateTime.Now;
-                timeEndDisplay.Text = timeEnd.ToLongTimeString();
-                TimeSpan timeElapsed = timeEnd - timeStart;
-                timeElapsedDisplay.Text = timeElapsed.ToString(@"hh\:mm\:ss\:ff");
             }
             cnn.Close();
-            FrState.TemplateTrained = true;
         }
 
-        private void btnDedupDb_Click(object sender, EventArgs e)
+        private void BtnFindImage_Click(object sender, EventArgs e)
         {
+            findImageProgressBar.Enabled = true;
+            findImageProgressBar.Minimum = 0;
 
-        }
+            SqlConnection cnn;
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
 
-        private void btnFindImage_Click(object sender, EventArgs e)
-        {
+            // set connection parameters
+            String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
+            string sqlCount = "select top (500) count(*) from prod.ADL800";
+            String sql = "select top (500) a.* " +
+            "from prod.ADL800 a " +
+                "join ( select ID_TOMIS, count(*) as countDup " +
+                    "from prod.ADL800 " +
+                    "group by ID_TOMIS) b " +
+                "on a.ID_TOMIS = b.ID_TOMIS " +
+                "order by countDup DESC, ID_TOMIS ASC, DTE_IMG_TKEN ASC;";
+            //open db connection
+            cnn = new SqlConnection(connectionString);
+            cnn.Open();
 
+            command = new SqlCommand(sqlCount, cnn);
+            int nRecs = (int)command.ExecuteScalar();
+            nRecs = 500;
+            textRecogProg.Text = string.Format("Searching {0} Records :", nRecs);
+            statusBarMain.Refresh();
+
+            int iCount = 0;
+
+            command = new SqlCommand(sql, cnn);
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            if (dataReader.HasRows)
+            {
+                findImageProgressBar.Maximum = nRecs;
+                while (dataReader.Read())
+                {
+                    iCount++;
+                    findImageProgressBar.Value = iCount;
+                    Image img;
+                    tomisID.Text = dataReader["ID_TOMIS"].ToString();
+                    tomisID.Refresh();
+                    img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
+                    imgProcessed.Image = img;
+                    imgProcessed.Refresh();
+                }
+            }
+            cnn.Close();
         }
     }
 }
