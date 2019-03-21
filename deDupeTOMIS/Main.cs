@@ -55,40 +55,37 @@ namespace deDupeTOMIS
         {
             bool done = false;
             this.Enabled = false;
+            this.Refresh();
 
             cv::VideoCapture capDev = new cv::VideoCapture(0);
             cv::Window vidPreview = new cv::Window("Video Preview");
             cv::Mat imgRaw = new cv::Mat();
 
-            //using (VideoCapture capDev = new VideoCapture(0))
-            //using (Window vidPreview = new Window("Video Preview"))
-            //using (Mat imgRaw = new Mat())
+            while (!done)
             {
-                while (!done)
+                capDev.Read(imgRaw); // same as cvQueryFrame
+                if (!imgRaw.Empty())
                 {
-                    capDev.Read(imgRaw); // same as cvQueryFrame
-                    if (!imgRaw.Empty())
+                    vidPreview.ShowImage(imgRaw);
+                    switch (cv::Cv2.WaitKey(100))
                     {
-                        vidPreview.ShowImage(imgRaw);
-                        switch (cv::Cv2.WaitKey(100))
-                        {
-                            case 13:
-                                FrState.imgWorking = imgRaw.Clone();
-                                imgOriginal.Image = FrState.imgWorking.ToBitmap();
-                                done = true;
-                                break;
-                            case 27:
-                                done = true;
-                                break;
-                        }
+                        case 13:
+                            FrState.imgWorking = imgRaw.Clone();
+                            imgOriginal.Image = FrState.imgWorking.ToBitmap();
+                            done = true;
+                            break;
+                        case 27:
+                            done = true;
+                            break;
                     }
                 }
-                vidPreview.Close();
-                vidPreview.Dispose();
-                imgRaw.Dispose();
-                capDev.Dispose();
-                this.Enabled = true;
             }
+            vidPreview.Close();
+            vidPreview.Dispose();
+            imgRaw.Dispose();
+            capDev.Dispose();
+            this.Enabled = true;
+            this.Refresh();
         }
 
         private void BtnImageFromFile_Click(object sender, EventArgs e)
@@ -113,39 +110,27 @@ namespace deDupeTOMIS
             }
         }
 
-        private void IdentifyImage(object sender, EventArgs e)
+        private void PreProcessImage()
         {
-            imgProcessed.Image = FrState.imgWorking.ToBitmap();
-            imgProcessed.Update();
+            // windows bitmap to MAT
+            cv::Mat imgProc = BitmapConverter.ToMat((Bitmap)imgOriginal.Image);
 
-            cv::Mat imgProc = FrState.imgWorking.Clone();
-            cv::Mat imgFinal = FrState.imgWorking.Clone();
+            // if input image low res convert to higher res
+            ////////////////////////////
 
+            // load classifiers
             String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
-
             cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
             cv::CascadeClassifier eyeL = new cv::CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
             cv::CascadeClassifier eyeR = new cv::CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
-            cv::CascadeClassifier eyes = new cv::CascadeClassifier(haarLocation + "haarcascade_eye.xml");
 
             cv::Rect[] faces;
             cv::Rect[] eyeLeft;
             cv::Rect[] eyeRight;
-            cv::Rect[] eyeBoth;
 
-            float imgArea = imgProc.Rows * imgProc.Cols;
-            float faceWidth = (float)(System.Math.Sqrt(imgArea / C.phi));
-            float faceHeight = imgArea / faceWidth;
-
-            int detectWidth = (int)System.Math.Round(faceWidth * 0.125);
-            int detectHeight = (int)System.Math.Round(faceHeight * 0.125);
-            int detectEyeHeight = (int)System.Math.Round(detectHeight * 0.125);
-            int detectEyeWidth = (int)System.Math.Round(detectEyeHeight * C.phi);
-
-            faces = faceC.DetectMultiScale(imgProc,1.1, 2, cv::HaarDetectionType.DoCannyPruning,new OpenCvSharp.Size(detectEyeWidth,detectEyeHeight));
-            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
-            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
-            eyeBoth = eyes.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning, new OpenCvSharp.Size(detectEyeWidth, detectEyeHeight));
+            faces = faceC.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
+            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
+            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
 
             // find biggest detected face
             int faceIdx = 0;
@@ -170,48 +155,48 @@ namespace deDupeTOMIS
                 OpenCvSharp.Point[] eyeLctrs = new OpenCvSharp.Point[eyeLeft.Length];
                 OpenCvSharp.Point[] eyeRctrs = new OpenCvSharp.Point[eyeRight.Length];
 
-                // check L eye detector
-                int nLeyes = 0;
-                int nReyes = 0;
+                OpenCvSharp.Point lECtr = new OpenCvSharp.Point();
+                OpenCvSharp.Point rECtr = new OpenCvSharp.Point();
 
-                for (int i = 0; i < eyeLeft.Length; i++)
+                // compute average eye center left and right
+                if (eyeLeft.Length > 1)
                 {
-                    // figure the center of the eye guess
-                    OpenCvSharp.Point ctrEye = new OpenCvSharp.Point(eyeLeft[i].X + (eyeLeft[i].Width / 2), eyeLeft[i].Y + (eyeLeft[i].Height / 2));
-                    if (faceI.Contains(ctrEye))
-                    {   // if ctr eye point is in detected face
-                        if (ctrEye.X < ctr.X)
-                        {   // and point is left of the midline
-                            if (ctrEye.Y < ctr.Y)
-                            {   // and point is above center of face
-                                nLeyes++;
-                                eyeLctrs[nLeyes] = ctrEye; // this is a good left eye guess
-                            }
-                        }
+                    int xA = 0;
+                    int yA = 0;
+                    for (int i = 0; i < eyeLeft.Length; i++)
+                    {
+                        // figure the center of the eye guess
+                        xA = xA + (eyeLeft[i].X + (eyeLeft[i].Width / 2));
+                        yA = yA + (eyeLeft[i].Y + (eyeLeft[i].Height / 2));
                     }
+                    lECtr.X = xA / eyeLeft.Length;
+                    lECtr.Y = yA / eyeLeft.Length;
+                } else
+                {
+                    lECtr.X = eyeLeft[0].X + (eyeLeft[0].Width / 2);
+                    lECtr.Y = eyeLeft[0].Y + (eyeLeft[0].Height / 2);
+                }
+                // check R eye detector
+                if (eyeRight.Length > 1)
+                {
+                    int xA = 0;
+                    int yA = 0;
+                    for (int i = 0; i < eyeRight.Length; i++)
+                    {
+                        // figure the center of the eye guess
+                        xA = xA + (eyeRight[i].X + (eyeRight[i].Width / 2));
+                        yA = yA + (eyeRight[i].Y + (eyeRight[i].Height / 2));
+                    }
+                    rECtr.X = xA / eyeRight.Length;
+                    rECtr.Y = yA / eyeRight.Length;
+                }
+                else
+                {
+                    rECtr.X = eyeRight[0].X + (eyeRight[0].Width / 2);
+                    rECtr.Y = eyeRight[0].Y + (eyeRight[0].Height / 2);
                 }
 
-                for (int i = 0; i < eyeRight.Length; i++)
-                {
-                    // figure the center of the eye guess
-                    OpenCvSharp.Point ctrEye = new OpenCvSharp.Point(eyeRight[i].X + (eyeRight[i].Width / 2), eyeRight[i].Y + (eyeRight[i].Height / 2));
-                    if (faceI.Contains(ctrEye))
-                    {   // if ctr eye point is in detected face
-                        if (ctrEye.X < ctr.X)
-                        {   // and point is left of the midline
-                            if (ctrEye.Y < ctr.Y)
-                            {   // and point is above center of face
-                                nReyes++;
-                                eyeRctrs[nReyes] = ctrEye; // this is a good left eye guess
-                            }
-                        }
-                    }
-                }
-                OpenCvSharp.Scalar ScWhite = new OpenCvSharp.Scalar(255, 255, 255);
                 OpenCvSharp.Scalar ScBlack = new OpenCvSharp.Scalar(0, 0, 0);
-                OpenCvSharp.Scalar ScRed = new OpenCvSharp.Scalar(0, 0, 255);
-                OpenCvSharp.Scalar ScGreen = new OpenCvSharp.Scalar(0, 255, 0);
-                OpenCvSharp.Scalar ScBlue = new OpenCvSharp.Scalar(255, 0, 0);
 
                 float eWidth = faceI.Width;
                 float eHeight = faceI.Width * C.phi;
@@ -219,51 +204,15 @@ namespace deDupeTOMIS
                 OpenCvSharp.Size2f eSize = new OpenCvSharp.Size2f((float)eWidth, (float)eHeight);
                 OpenCvSharp.Size eSizeRect = new OpenCvSharp.Size((int)eWidth, (int)eHeight);
 
-                float angle = (float)(System.Math.Atan2(eyeRctrs[0].Y - eyeLctrs[0].Y, eyeRctrs[0].X - eyeLctrs[0].X)*180 / System.Math.PI);
+                float angle = (float)(System.Math.Atan2(rECtr.Y - lECtr.Y, rECtr.X - lECtr.X)*180 / System.Math.PI);
                 OpenCvSharp.RotatedRect faceE = new OpenCvSharp.RotatedRect(ctr,eSize,angle);
                 OpenCvSharp.Rect faceRect = new OpenCvSharp.Rect(ctr.X-(eSizeRect.Width/2), ctr.Y-(eSizeRect.Height/2), eSizeRect.Width, eSizeRect.Height);
 
-                Random rnd = new Random();
-                int endLp = rnd.Next(1,3);
-                for (int j = 0; j < endLp; j++)
-                {
-                    for (int i = 0; i < eyeLeft.Length; i++)
-                    {
-                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc.Rectangle(eyeLeft[i], ScRed, 8);
-                        imgProcessed.Image = imgProc.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc = imgFinal.Clone();
-                        System.Threading.Thread.Sleep(rnd.Next(50, 250));
-                    }
-
-                    for (int i = 0; i < eyeRight.Length; i++)
-                    {
-                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc.Rectangle(eyeRight[i], ScGreen, 8);
-                        imgProcessed.Image = imgProc.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc = imgFinal.Clone();
-                        System.Threading.Thread.Sleep(rnd.Next(50,250));
-                    }
-
-                    for (int i = 0; i < eyeBoth.Length; i++)
-                    {
-                        imgProc.Rectangle(eyeBoth[i], ScBlue, 8);
-                        imgProcessed.Image = FrState.imgWorking.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc.Rectangle(eyeBoth[i], ScBlue, 8);
-                        imgProcessed.Image = imgProc.ToBitmap();
-                        imgProcessed.Update();
-                        imgProc = imgFinal.Clone();
-                        System.Threading.Thread.Sleep(rnd.Next(50,250));
-                    }
-                }
-                imgProc.Circle(ctr, 1, ScBlack, 8);
-                imgProc.Ellipse(faceE, ScWhite, 8);
-                imgProcessed.Image = imgProc.ToBitmap();
+                // draw processed ellipse
+                imgProc.Ellipse(faceE, ScBlack, 2);
+                imgProc.Circle(ctr, 2, ScBlack, 1);
+                imgProc.Circle(rECtr, 2, ScBlack, 1);
+                imgProc.Circle(lECtr, 2, ScBlack, 1);
 
                 cv::Mat imgResize = imgProc.Clone(faceRect);
                 OpenCvSharp.Size newSize = new OpenCvSharp.Size(960,1440);
@@ -293,7 +242,7 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            String sql = "select top (500) a.* " +
+            String sql = "select top (100) a.* " +
             "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
@@ -317,6 +266,9 @@ namespace deDupeTOMIS
                     tomisID.Text = dataReader["ID_TOMIS"].ToString();
                     tomisID.Refresh();
                     img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
+                    imgOriginal.Image = img;
+                    imgOriginal.Refresh();
+                    PreProcessImage();
                 }
                 timeEnd = DateTime.Now;
                 timeEndDisplay.Text = timeEnd.ToLongTimeString();
@@ -337,7 +289,7 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            String sql = "select top (500) a.* " +
+            String sql = "select top (100) a.* " +
             "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
@@ -376,8 +328,8 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            string sqlCount = "select top (500) count(*) from prod.ADL800";
-            String sql = "select top (500) a.* " +
+            string sqlCount = "select top (100) count(*) from prod.ADL800";
+            String sql = "select top (100) a.* " +
             "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
@@ -390,7 +342,7 @@ namespace deDupeTOMIS
 
             command = new SqlCommand(sqlCount, cnn);
             int nRecs = (int)command.ExecuteScalar();
-            nRecs = 500;
+            nRecs = 100;
             textRecogProg.Text = string.Format("Searching {0} Records :", nRecs);
             statusBarMain.Refresh();
 
