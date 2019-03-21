@@ -1,11 +1,11 @@
-﻿using OpenCvSharp;
+﻿using System;
+using System.Windows.Forms;
+using cv = OpenCvSharp;
 
 namespace deDupeTOMIS
 {
     public static class FrState
     {
-        public static Mat imgWorking;
-
         public static bool TemplateTrained { get; set; }
     }
 

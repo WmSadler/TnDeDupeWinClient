@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using cv = OpenCvSharp;
 using OpenCvSharp.Extensions;
-using T = Tesseract;
 
 
 namespace deDupeTOMIS
@@ -21,6 +20,10 @@ namespace deDupeTOMIS
         public Main()
         {
             InitializeComponent();
+
+            
+            //cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
+
             FrState.TemplateTrained = false;
             Update_Status();
         }
@@ -70,8 +73,7 @@ namespace deDupeTOMIS
                     switch (cv::Cv2.WaitKey(100))
                     {
                         case 13:
-                            FrState.imgWorking = imgRaw.Clone();
-                            imgOriginal.Image = FrState.imgWorking.ToBitmap();
+                            imgOriginal.Image = imgRaw.ToBitmap();
                             done = true;
                             break;
                         case 27:
@@ -86,6 +88,7 @@ namespace deDupeTOMIS
             capDev.Dispose();
             this.Enabled = true;
             this.Refresh();
+            PreProcessImage();
         }
 
         private void BtnImageFromFile_Click(object sender, EventArgs e)
@@ -103,34 +106,25 @@ namespace deDupeTOMIS
             {
                 // put file image into win bitmap
                 Bitmap imgBmp = (Bitmap)Image.FromFile(ofDialog.FileName);
-                // colnvert to MAT format and put into global working image
-                FrState.imgWorking = BitmapConverter.ToMat(imgBmp);
                 // display the original image in the app
                 imgOriginal.Image = imgBmp;
+                PreProcessImage();
             }
         }
 
         private void PreProcessImage()
         {
-            // windows bitmap to MAT
+            // preprocess image to make it ready for FR
+            // windows bitmap to MAT for processing
             cv::Mat imgProc = BitmapConverter.ToMat((Bitmap)imgOriginal.Image);
-
-            // if input image low res convert to higher res
-            ////////////////////////////
 
             // load classifiers
             String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
             cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
-            cv::CascadeClassifier eyeL = new cv::CascadeClassifier(haarLocation + "haarcascade_lefteye_2splits.xml");
-            cv::CascadeClassifier eyeR = new cv::CascadeClassifier(haarLocation + "haarcascade_righteye_2splits.xml");
 
             cv::Rect[] faces;
-            cv::Rect[] eyeLeft;
-            cv::Rect[] eyeRight;
 
             faces = faceC.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
-            eyeLeft = eyeL.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
-            eyeRight = eyeR.DetectMultiScale(imgProc, 1.1, 2, cv::HaarDetectionType.DoCannyPruning);
 
             // find biggest detected face
             int faceIdx = 0;
@@ -148,78 +142,13 @@ namespace deDupeTOMIS
                         faceIdx = i;
                     }
                 }
-                //Find Center of detected Face
-                cv::Rect faceI = faces[faceIdx];
-                OpenCvSharp.Point ctr = new OpenCvSharp.Point(faceI.X + (faceI.Width / 2), faceI.Y + (faceI.Height / 2));
 
-                OpenCvSharp.Point[] eyeLctrs = new OpenCvSharp.Point[eyeLeft.Length];
-                OpenCvSharp.Point[] eyeRctrs = new OpenCvSharp.Point[eyeRight.Length];
-
-                OpenCvSharp.Point lECtr = new OpenCvSharp.Point();
-                OpenCvSharp.Point rECtr = new OpenCvSharp.Point();
-
-                // compute average eye center left and right
-                if (eyeLeft.Length > 1)
-                {
-                    int xA = 0;
-                    int yA = 0;
-                    for (int i = 0; i < eyeLeft.Length; i++)
-                    {
-                        // figure the center of the eye guess
-                        xA = xA + (eyeLeft[i].X + (eyeLeft[i].Width / 2));
-                        yA = yA + (eyeLeft[i].Y + (eyeLeft[i].Height / 2));
-                    }
-                    lECtr.X = xA / eyeLeft.Length;
-                    lECtr.Y = yA / eyeLeft.Length;
-                } else
-                {
-                    lECtr.X = eyeLeft[0].X + (eyeLeft[0].Width / 2);
-                    lECtr.Y = eyeLeft[0].Y + (eyeLeft[0].Height / 2);
-                }
-                // check R eye detector
-                if (eyeRight.Length > 1)
-                {
-                    int xA = 0;
-                    int yA = 0;
-                    for (int i = 0; i < eyeRight.Length; i++)
-                    {
-                        // figure the center of the eye guess
-                        xA = xA + (eyeRight[i].X + (eyeRight[i].Width / 2));
-                        yA = yA + (eyeRight[i].Y + (eyeRight[i].Height / 2));
-                    }
-                    rECtr.X = xA / eyeRight.Length;
-                    rECtr.Y = yA / eyeRight.Length;
-                }
-                else
-                {
-                    rECtr.X = eyeRight[0].X + (eyeRight[0].Width / 2);
-                    rECtr.Y = eyeRight[0].Y + (eyeRight[0].Height / 2);
-                }
-
-                OpenCvSharp.Scalar ScBlack = new OpenCvSharp.Scalar(0, 0, 0);
-
-                float eWidth = faceI.Width;
-                float eHeight = faceI.Width * C.phi;
-
-                OpenCvSharp.Size2f eSize = new OpenCvSharp.Size2f((float)eWidth, (float)eHeight);
-                OpenCvSharp.Size eSizeRect = new OpenCvSharp.Size((int)eWidth, (int)eHeight);
-
-                float angle = (float)(System.Math.Atan2(rECtr.Y - lECtr.Y, rECtr.X - lECtr.X)*180 / System.Math.PI);
-                OpenCvSharp.RotatedRect faceE = new OpenCvSharp.RotatedRect(ctr,eSize,angle);
-                OpenCvSharp.Rect faceRect = new OpenCvSharp.Rect(ctr.X-(eSizeRect.Width/2), ctr.Y-(eSizeRect.Height/2), eSizeRect.Width, eSizeRect.Height);
-
-                // draw processed ellipse
-                imgProc.Ellipse(faceE, ScBlack, 2);
-                imgProc.Circle(ctr, 2, ScBlack, 1);
-                imgProc.Circle(rECtr, 2, ScBlack, 1);
-                imgProc.Circle(lECtr, 2, ScBlack, 1);
-
-                cv::Mat imgResize = imgProc.Clone(faceRect);
-                OpenCvSharp.Size newSize = new OpenCvSharp.Size(960,1440);
+                cv::Mat imgResize = imgProc.Clone(faces[faceIdx]);
+                OpenCvSharp.Size newSize = new OpenCvSharp.Size(1280,1280);
                 imgResize.Resize(newSize);
-                imgProcessed.Image = imgResize.ToBitmap();
+                imgOriginal.Image = imgResize.ToBitmap();
                 
-                imgProcessed.Update();
+                imgOriginal.Update();
             }
             else
             {
