@@ -51,12 +51,7 @@
             this.grpImgModified = new System.Windows.Forms.GroupBox();
             this.imgProcessed = new System.Windows.Forms.PictureBox();
             this.tabSetup = new System.Windows.Forms.TabPage();
-            this.grpBoxIPPSetup = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.btnConnectIPP = new System.Windows.Forms.Button();
+            this.gbImpersonate = new System.Windows.Forms.GroupBox();
             this.tabResults = new System.Windows.Forms.TabPage();
             this.deDupeResultsMatrix = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,6 +64,11 @@
             this.statusBarMain = new System.Windows.Forms.StatusStrip();
             this.textRecogProg = new System.Windows.Forms.ToolStripStatusLabel();
             this.findImageProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.lblUID = new System.Windows.Forms.Label();
+            this.lblPwd = new System.Windows.Forms.Label();
+            this.inpUid = new System.Windows.Forms.TextBox();
+            this.inpPw = new System.Windows.Forms.TextBox();
+            this.btnImpersonate = new System.Windows.Forms.Button();
             this.tabDeDupMain.SuspendLayout();
             this.tabFacialRecognition.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMainFr)).BeginInit();
@@ -81,7 +81,7 @@
             this.grpImgModified.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgProcessed)).BeginInit();
             this.tabSetup.SuspendLayout();
-            this.grpBoxIPPSetup.SuspendLayout();
+            this.gbImpersonate.SuspendLayout();
             this.tabResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deDupeResultsMatrix)).BeginInit();
             this.statusBarMain.SuspendLayout();
@@ -353,7 +353,7 @@
             // 
             // tabSetup
             // 
-            this.tabSetup.Controls.Add(this.grpBoxIPPSetup);
+            this.tabSetup.Controls.Add(this.gbImpersonate);
             this.tabSetup.Location = new System.Drawing.Point(4, 22);
             this.tabSetup.Name = "tabSetup";
             this.tabSetup.Padding = new System.Windows.Forms.Padding(3);
@@ -362,69 +362,19 @@
             this.tabSetup.Text = "Setup";
             this.tabSetup.UseVisualStyleBackColor = true;
             // 
-            // grpBoxIPPSetup
+            // gbImpersonate
             // 
-            this.grpBoxIPPSetup.Controls.Add(this.textBox1);
-            this.grpBoxIPPSetup.Controls.Add(this.label7);
-            this.grpBoxIPPSetup.Controls.Add(this.textBox2);
-            this.grpBoxIPPSetup.Controls.Add(this.label8);
-            this.grpBoxIPPSetup.Controls.Add(this.btnConnectIPP);
-            this.grpBoxIPPSetup.Location = new System.Drawing.Point(7, 5);
-            this.grpBoxIPPSetup.Margin = new System.Windows.Forms.Padding(2);
-            this.grpBoxIPPSetup.Name = "grpBoxIPPSetup";
-            this.grpBoxIPPSetup.Padding = new System.Windows.Forms.Padding(2);
-            this.grpBoxIPPSetup.Size = new System.Drawing.Size(539, 74);
-            this.grpBoxIPPSetup.TabIndex = 1;
-            this.grpBoxIPPSetup.TabStop = false;
-            this.grpBoxIPPSetup.Text = "IPP Endpoint Setup";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(343, 17);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(132, 20);
-            this.textBox1.TabIndex = 10;
-            this.textBox1.Text = "12345";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(299, 20);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(40, 13);
-            this.label7.TabIndex = 9;
-            this.label7.Text = "PORT:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(92, 17);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(191, 20);
-            this.textBox2.TabIndex = 8;
-            this.textBox2.Text = "localhost";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(39, 20);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(49, 13);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "IPP URI:";
-            // 
-            // btnConnectIPP
-            // 
-            this.btnConnectIPP.Location = new System.Drawing.Point(199, 41);
-            this.btnConnectIPP.Margin = new System.Windows.Forms.Padding(2);
-            this.btnConnectIPP.Name = "btnConnectIPP";
-            this.btnConnectIPP.Size = new System.Drawing.Size(157, 21);
-            this.btnConnectIPP.TabIndex = 1;
-            this.btnConnectIPP.Text = "Connect to IPP";
-            this.btnConnectIPP.UseVisualStyleBackColor = true;
+            this.gbImpersonate.Controls.Add(this.btnImpersonate);
+            this.gbImpersonate.Controls.Add(this.inpPw);
+            this.gbImpersonate.Controls.Add(this.inpUid);
+            this.gbImpersonate.Controls.Add(this.lblPwd);
+            this.gbImpersonate.Controls.Add(this.lblUID);
+            this.gbImpersonate.Location = new System.Drawing.Point(8, 6);
+            this.gbImpersonate.Name = "gbImpersonate";
+            this.gbImpersonate.Size = new System.Drawing.Size(228, 108);
+            this.gbImpersonate.TabIndex = 0;
+            this.gbImpersonate.TabStop = false;
+            this.gbImpersonate.Text = "Login As";
             // 
             // tabResults
             // 
@@ -521,6 +471,51 @@
             this.findImageProgressBar.Name = "findImageProgressBar";
             this.findImageProgressBar.Size = new System.Drawing.Size(100, 16);
             // 
+            // lblUID
+            // 
+            this.lblUID.AutoSize = true;
+            this.lblUID.Location = new System.Drawing.Point(17, 22);
+            this.lblUID.Name = "lblUID";
+            this.lblUID.Size = new System.Drawing.Size(44, 13);
+            this.lblUID.TabIndex = 0;
+            this.lblUID.Text = "User Id:";
+            // 
+            // lblPwd
+            // 
+            this.lblPwd.AutoSize = true;
+            this.lblPwd.Location = new System.Drawing.Point(5, 48);
+            this.lblPwd.Name = "lblPwd";
+            this.lblPwd.Size = new System.Drawing.Size(56, 13);
+            this.lblPwd.TabIndex = 1;
+            this.lblPwd.Text = "Password:";
+            // 
+            // inpUid
+            // 
+            this.inpUid.Location = new System.Drawing.Point(67, 19);
+            this.inpUid.Name = "inpUid";
+            this.inpUid.Size = new System.Drawing.Size(148, 20);
+            this.inpUid.TabIndex = 2;
+            // 
+            // inpPw
+            // 
+            this.inpPw.Location = new System.Drawing.Point(67, 45);
+            this.inpPw.Name = "inpPw";
+            this.inpPw.PasswordChar = '*';
+            this.inpPw.Size = new System.Drawing.Size(148, 20);
+            this.inpPw.TabIndex = 3;
+            // 
+            // btnImpersonate
+            // 
+            this.btnImpersonate.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnImpersonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImpersonate.Location = new System.Drawing.Point(8, 71);
+            this.btnImpersonate.Name = "btnImpersonate";
+            this.btnImpersonate.Size = new System.Drawing.Size(207, 25);
+            this.btnImpersonate.TabIndex = 18;
+            this.btnImpersonate.Text = "Login";
+            this.btnImpersonate.UseVisualStyleBackColor = false;
+            this.btnImpersonate.Click += new System.EventHandler(this.BtnImpersonate_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,8 +540,8 @@
             this.grpImgModified.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imgProcessed)).EndInit();
             this.tabSetup.ResumeLayout(false);
-            this.grpBoxIPPSetup.ResumeLayout(false);
-            this.grpBoxIPPSetup.PerformLayout();
+            this.gbImpersonate.ResumeLayout(false);
+            this.gbImpersonate.PerformLayout();
             this.tabResults.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.deDupeResultsMatrix)).EndInit();
             this.statusBarMain.ResumeLayout(false);
@@ -561,8 +556,6 @@
         private System.Windows.Forms.TabPage tabFacialRecognition;
         private System.Windows.Forms.TabPage tabSetup;
         private System.Windows.Forms.TabPage tabResults;
-        private System.Windows.Forms.GroupBox grpBoxIPPSetup;
-        private System.Windows.Forms.Button btnConnectIPP;
         private System.Windows.Forms.SplitContainer splitContainerMainFr;
         private System.Windows.Forms.Button btnImageFromFile;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -570,10 +563,6 @@
         private System.Windows.Forms.PictureBox imgOriginal;
         private System.Windows.Forms.GroupBox grpImgModified;
         private System.Windows.Forms.PictureBox imgProcessed;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DataGridView deDupeResultsMatrix;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
@@ -598,6 +587,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripProgressBar findImageProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel textRecogProg;
+        private System.Windows.Forms.GroupBox gbImpersonate;
+        private System.Windows.Forms.Button btnImpersonate;
+        private System.Windows.Forms.TextBox inpPw;
+        private System.Windows.Forms.TextBox inpUid;
+        private System.Windows.Forms.Label lblPwd;
+        private System.Windows.Forms.Label lblUID;
     }
 }
 

@@ -21,9 +21,6 @@ namespace deDupeTOMIS
         {
             InitializeComponent();
 
-            
-            //cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
-
             FrState.TemplateTrained = false;
             Update_Status();
         }
@@ -88,7 +85,7 @@ namespace deDupeTOMIS
             capDev.Dispose();
             this.Enabled = true;
             this.Refresh();
-            PreProcessImage();
+            PreProcessImage("WebCam");
         }
 
         private void BtnImageFromFile_Click(object sender, EventArgs e)
@@ -108,18 +105,18 @@ namespace deDupeTOMIS
                 Bitmap imgBmp = (Bitmap)Image.FromFile(ofDialog.FileName);
                 // display the original image in the app
                 imgOriginal.Image = imgBmp;
-                PreProcessImage();
+                PreProcessImage(ofDialog.FileName);
             }
         }
 
-        private void PreProcessImage()
+        private void PreProcessImage(String tId)
         {
             // preprocess image to make it ready for FR
             // windows bitmap to MAT for processing
             cv::Mat imgProc = BitmapConverter.ToMat((Bitmap)imgOriginal.Image);
 
             // load classifiers
-            String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\..\\..\\haarCascades\\";
+            String haarLocation = System.IO.Path.GetDirectoryName(Application.StartupPath) + "\\haar\\";
             cv::CascadeClassifier faceC = new cv::CascadeClassifier(haarLocation + "haarcascade_frontalface_alt.xml");
 
             cv::Rect[] faces;
@@ -131,8 +128,7 @@ namespace deDupeTOMIS
             if (faces.Length >= 1)
             {
                 // Largest Face Found
-                long size = 0;
-                long max = 0;
+                long size = 0;          long max = 0;
                 for (int i = 0; i < faces.Length; i++)
                 {
                     size = faces[i].Height * faces[i].Width;
@@ -146,13 +142,14 @@ namespace deDupeTOMIS
                 cv::Mat imgResize = imgProc.Clone(faces[faceIdx]);
                 OpenCvSharp.Size newSize = new OpenCvSharp.Size(1280,1280);
                 imgResize.Resize(newSize);
-                imgOriginal.Image = imgResize.ToBitmap();
-                
-                imgOriginal.Update();
+                imgProcessed.Image = imgResize.ToBitmap();
+                imgProcessed.Update();
+                //imgOriginal.Refresh();
             }
             else
             {
-                MessageBox.Show("No Face Found", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Console.WriteLine(String.Format("No Face Found TomisID {0}", tId));
+                //MessageBox.Show("No Face Found", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -171,10 +168,12 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            String sql = "select top (100) a.* " +
-            "from prod.ADL800 a " +
+            //String sql = "select top (100) a.* " +
+            String sql = "select a.* " + 
+                "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
+                    "where ID_TOMIS='00338079' " +
                     "group by ID_TOMIS) b " +
                 "on a.ID_TOMIS = b.ID_TOMIS " +
                 "order by countDup DESC, ID_TOMIS ASC, DTE_IMG_TKEN ASC;";
@@ -182,8 +181,8 @@ namespace deDupeTOMIS
             cnn = new SqlConnection(connectionString);
             cnn.Open();
             command = new SqlCommand(sql, cnn);
-            SqlDataReader dataReader = command.ExecuteReader();
-
+                        SqlDataReader dataReader = command.ExecuteReader();
+            //SqlDataReader dataReader = command.ExecuteReaderAsync();
             if (dataReader.HasRows)
             {
                 timeStart = DateTime.Now;
@@ -197,7 +196,7 @@ namespace deDupeTOMIS
                     img = System.Drawing.Image.FromStream(new System.IO.MemoryStream((byte[])dataReader["IMG_FCE"]));
                     imgOriginal.Image = img;
                     imgOriginal.Refresh();
-                    PreProcessImage();
+                    PreProcessImage(tomisID.Text);
                 }
                 timeEnd = DateTime.Now;
                 timeEndDisplay.Text = timeEnd.ToLongTimeString();
@@ -218,8 +217,9 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            String sql = "select top (100) a.* " +
-            "from prod.ADL800 a " +
+            //String sql = "select top (100) a.* " +
+            String sql = "select a.* " + 
+                "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
                     "group by ID_TOMIS) b " +
@@ -257,9 +257,11 @@ namespace deDupeTOMIS
 
             // set connection parameters
             String connectionString = @"Data Source=ag03ndcwb00053;Initial Catalog=FrTempSrcCopy;Integrated Security=True";
-            string sqlCount = "select top (100) count(*) from prod.ADL800";
-            String sql = "select top (100) a.* " +
-            "from prod.ADL800 a " +
+            //string sqlCount = "select top (100) count(*) from prod.ADL800";
+            string sqlCount = "select count(*) from prod.ADL800";
+            //String sql = "select top (100) a.* " +
+            String sql = "select a.* " + 
+                "from prod.ADL800 a " +
                 "join ( select ID_TOMIS, count(*) as countDup " +
                     "from prod.ADL800 " +
                     "group by ID_TOMIS) b " +
@@ -271,7 +273,7 @@ namespace deDupeTOMIS
 
             command = new SqlCommand(sqlCount, cnn);
             int nRecs = (int)command.ExecuteScalar();
-            nRecs = 100;
+            //nRecs = 100;
             textRecogProg.Text = string.Format("Searching {0} Records :", nRecs);
             statusBarMain.Refresh();
 
@@ -296,6 +298,19 @@ namespace deDupeTOMIS
                 }
             }
             cnn.Close();
+        }
+
+        private void BtnImpersonate_Click(object sender, EventArgs e)
+        {/*
+            Whoami Uid = inpUid.Text;
+            DbCreds.Pwd = inpPw.Text;
+            if (DbCreds.Impersonate())
+            {
+                MessageBox.Show("Done");
+            } else
+            {
+                MessageBox.Show("Failed");
+            }*/
         }
     }
 }
